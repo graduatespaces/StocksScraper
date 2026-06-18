@@ -1,0 +1,9 @@
+# YouTube channels to scan — one per line
+# Supports: @handle, full URL, or UCxxxxxxx channel ID
+# Lines starting with # are ignored
+
+@InvestingWithTom
+@AndreiJikh
+@MeetKevin
+https://www.youtube.com/@JosephCarlson
+https://www.youtube.com/@NewMoneyYouTube

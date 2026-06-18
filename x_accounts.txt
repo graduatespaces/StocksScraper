@@ -1,0 +1,8 @@
+# X (Twitter) accounts to scan — one per line
+# Use @ handle or just the username
+# Lines starting with # are ignored
+
+@jimcramer
+@chamath
+@realWillMeade
+@StockMoe
