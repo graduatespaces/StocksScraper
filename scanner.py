@@ -238,6 +238,7 @@ def scan_youtube(client: anthropic.Anthropic, stocks: dict, seen: set, since: da
             channel   = item["snippet"]["channelTitle"]
 
             if vid_id in seen:
+                log.info(f"  Skipping (already processed): [{channel}] {title}")
                 continue
 
             log.info(f"  Analyzing: [{channel}] {title}")
