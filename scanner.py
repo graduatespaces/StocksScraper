@@ -118,8 +118,25 @@ Rules:
 - Empty arrays if nothing qualifies"""
 
 
+def _extract_json_object(text: str) -> dict:
+    """
+    Defensively pull a JSON object out of Claude's response, even if it's
+    wrapped in markdown fences or has leading/trailing commentary.
+    """
+    text = text.strip()
+    if text.startswith("```"):
+        text = text.split("```")[1] if text.count("```") >= 2 else text.lstrip("`")
+        text = text.removeprefix("json").strip()
+    start = text.find("{")
+    end   = text.rfind("}")
+    if start == -1 or end == -1 or end < start:
+        raise ValueError("No JSON object found in response")
+    return json.loads(text[start:end + 1])
+
+
 def analyze_content(client: anthropic.Anthropic, content: str, source_label: str) -> tuple[list, list]:
     """Returns (bullish_tickers, bearish_tickers)."""
+    raw = ""
     try:
         msg = client.messages.create(
             model="claude-sonnet-4-6",
@@ -130,13 +147,13 @@ def analyze_content(client: anthropic.Anthropic, content: str, source_label: str
             }],
             system=ANALYSIS_PROMPT,
         )
-        raw = msg.content[0].text.strip()
-        data = json.loads(raw)
+        raw = msg.content[0].text
+        data = _extract_json_object(raw)
         bullish = [t.upper() for t in data.get("bullish", []) if isinstance(t, str) and t.isalpha() and 1 <= len(t) <= 5]
         bearish = [t.upper() for t in data.get("bearish", []) if isinstance(t, str) and t.isalpha() and 1 <= len(t) <= 5]
         return bullish, bearish
     except Exception as e:
-        log.warning(f"Claude analysis failed for '{source_label}': {e}")
+        log.warning(f"Claude analysis failed for '{source_label}': {e} | raw_response={raw[:200]!r}")
         return [], []
 
 
@@ -354,7 +371,9 @@ def main():
     log.info(f"=== Scan started | lookback={args.days}d | existing stocks={sorted(before)} ===")
 
     scan_youtube(client, stocks, seen, since)
-    scan_x(client, stocks, seen, since)
+    # X/Twitter scanning disabled — free scraping (nitter) is no longer reliable.
+    # Re-enable once a paid X API or alternative source is set up.
+    # scan_x(client, stocks, seen, since)
 
     after   = set(stocks.keys())
     added   = after - before
