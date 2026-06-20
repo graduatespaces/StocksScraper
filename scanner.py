@@ -151,6 +151,7 @@ def analyze_content(client: anthropic.Anthropic, content: str, source_label: str
         data = _extract_json_object(raw)
         bullish = [t.upper() for t in data.get("bullish", []) if isinstance(t, str) and t.isalpha() and 1 <= len(t) <= 5]
         bearish = [t.upper() for t in data.get("bearish", []) if isinstance(t, str) and t.isalpha() and 1 <= len(t) <= 5]
+        log.info(f"    -> bullish={bullish} bearish={bearish}")
         return bullish, bearish
     except Exception as e:
         log.warning(f"Claude analysis failed for '{source_label}': {e} | raw_response={raw[:200]!r}")
@@ -241,6 +242,10 @@ def scan_youtube(client: anthropic.Anthropic, stocks: dict, seen: set, since: da
 
             log.info(f"  Analyzing: [{channel}] {title}")
             transcript = get_transcript(vid_id)
+            if not transcript:
+                log.warning(f"    ⚠ No transcript available — Claude only sees title/description")
+            else:
+                log.info(f"    Transcript fetched: {len(transcript)} chars")
             content    = f"Title: {title}\n\nDescription: {item['snippet'].get('description','')[:300]}\n\nTranscript: {transcript}"
             source     = f"YouTube: {channel}"
 
