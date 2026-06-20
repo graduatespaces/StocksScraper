@@ -18,6 +18,7 @@ from pathlib import Path
 import anthropic
 from googleapiclient.discovery import build
 from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound, TranscriptsDisabled
+from youtube_transcript_api.proxies import WebshareProxyConfig
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -192,13 +193,33 @@ def resolve_channel_id(youtube, identifier: str) -> str | None:
     return None
 
 
+def _get_transcript_client() -> YouTubeTranscriptApi:
+    """
+    Returns a YouTubeTranscriptApi instance routed through a Webshare proxy
+    if credentials are set, otherwise falls back to a direct (likely blocked) connection.
+    """
+    ws_user = os.environ.get("WEBSHARE_PROXY_USERNAME")
+    ws_pass = os.environ.get("WEBSHARE_PROXY_PASSWORD")
+    if ws_user and ws_pass:
+        return YouTubeTranscriptApi(
+            proxy_config=WebshareProxyConfig(
+                proxy_username=ws_user,
+                proxy_password=ws_pass,
+            )
+        )
+    log.warning("WEBSHARE_PROXY_USERNAME/PASSWORD not set — transcript fetches will likely be blocked by YouTube")
+    return YouTubeTranscriptApi()
+
+
 def get_transcript(video_id: str) -> str:
     try:
-        segments = YouTubeTranscriptApi.get_transcript(video_id, languages=["en", "en-US"])
-        return " ".join(s["text"] for s in segments)[:MAX_TRANSCRIPT]
+        ytt_api  = _get_transcript_client()
+        fetched  = ytt_api.fetch(video_id, languages=["en", "en-US"])
+        return " ".join(snippet.text for snippet in fetched)[:MAX_TRANSCRIPT]
     except (NoTranscriptFound, TranscriptsDisabled):
         return ""
-    except Exception:
+    except Exception as e:
+        log.debug(f"Transcript error for {video_id}: {e}")
         return ""
 
 
