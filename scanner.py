@@ -214,8 +214,9 @@ def scan_youtube(client: anthropic.Anthropic, stocks: dict, seen: set, since: da
     for identifier in channels:
         channel_id = resolve_channel_id(youtube, identifier)
         if not channel_id:
-            log.warning(f"  Could not resolve: {identifier}")
+            log.warning(f"  ❌ Could not resolve channel: {identifier}")
             continue
+        log.info(f"  ✓ Resolved {identifier} -> {channel_id}")
 
         try:
             resp = youtube.search().list(
@@ -227,7 +228,10 @@ def scan_youtube(client: anthropic.Anthropic, stocks: dict, seen: set, since: da
             log.warning(f"  Error fetching videos for {identifier}: {e}")
             continue
 
-        for item in resp.get("items", []):
+        items = resp.get("items", [])
+        log.info(f"  {identifier}: {len(items)} video(s) found since {since.strftime('%Y-%m-%d')}")
+
+        for item in items:
             vid_id    = item["id"]["videoId"]
             title     = item["snippet"]["title"]
             channel   = item["snippet"]["channelTitle"]
@@ -353,7 +357,7 @@ def scan_x(client: anthropic.Anthropic, stocks: dict, seen: set, since: datetime
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true", help="Don't save changes to stocks.json")
-    parser.add_argument("--days",    type=int, default=1,  help="How many days back to scan (default: 1)")
+    parser.add_argument("--days",    type=int, default=2,  help="How many days back to scan (default: 2)")
     args = parser.parse_args()
 
     anthropic_key = os.environ.get("ANTHROPIC_API_KEY")
