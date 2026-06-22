@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+
+    <!-- Unique identifier for this job -->
+    <key>Label</key>
+    <string>com.stockscanner.daily</string>
+
+    <!-- Command to run: python3 scanner.py -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/python3</string>
+        <string>/Users/kishore/StocksScraper/scanner.py</string>
+    </array>
+
+    <!-- Working directory (so relative paths like stocks.json work) -->
+    <key>WorkingDirectory</key>
+    <string>/Users/kishore/StocksScraper</string>
+
+    <!-- Run daily at 8:00 AM -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>8</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <!-- Environment variables (API keys) -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>YOUTUBE_API_KEY</key>
+        <string>AIzaSyCT0ShcDkJW5_3-VIwWM5I2tiW2jQmRr4I</string>
+        <key>ANTHROPIC_API_KEY</key>
+        <string>
+REDACTED </string>
+    </dict>
+
+    <!-- Log output to these files so you can check what happened -->
+    <key>StandardOutPath</key>
+    <string>/Users/kishore/StocksScraper/launchd_out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/kishore/StocksScraper/launchd_err.log</string>
+
+    <!-- Rerun if missed (e.g. computer was asleep at 8am) -->
+    <key>RunAtLoad</key>
+    <false/>
+
+</dict>
+</plist>

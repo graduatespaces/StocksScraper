@@ -15,10 +15,10 @@ import argparse
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
+import time
 import anthropic
 from googleapiclient.discovery import build
 from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound, TranscriptsDisabled
-from youtube_transcript_api.proxies import WebshareProxyConfig
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -156,7 +156,7 @@ def analyze_content(client: anthropic.Anthropic, content: str, source_label: str
         return bullish, bearish
     except Exception as e:
         log.warning(f"Claude analysis failed for '{source_label}': {e} | raw_response={raw[:200]!r}")
-        return [], []
+        return None, None
 
 
 # ── YouTube scanner ───────────────────────────────────────────────────────────
@@ -169,9 +169,28 @@ def load_youtube_channels() -> list:
             if l.strip() and not l.startswith("#")]
 
 
+CHANNEL_CACHE_FILE    = Path("channel_id_cache.json")
+
+
+def _load_channel_cache() -> dict:
+    if CHANNEL_CACHE_FILE.exists():
+        return json.loads(CHANNEL_CACHE_FILE.read_text())
+    return {}
+
+
+def _save_channel_cache(cache: dict):
+    CHANNEL_CACHE_FILE.write_text(json.dumps(cache, indent=2))
+
+
 def resolve_channel_id(youtube, identifier: str) -> str | None:
     if identifier.startswith("UC") and len(identifier) == 24:
         return identifier
+
+    cache = _load_channel_cache()
+    if identifier in cache:
+        return cache[identifier]
+
+    resolved = None
     for prefix in ["https://www.youtube.com/@", "https://youtube.com/@", "@"]:
         if identifier.startswith(prefix):
             handle = identifier[len(prefix):].split("/")[0]
@@ -179,47 +198,38 @@ def resolve_channel_id(youtube, identifier: str) -> str | None:
                 resp = youtube.search().list(q=handle, type="channel", part="id", maxResults=1).execute()
                 items = resp.get("items", [])
                 if items:
-                    return items[0]["id"]["channelId"]
+                    resolved = items[0]["id"]["channelId"]
             except Exception as e:
                 log.warning(f"Could not resolve handle '{handle}': {e}")
-            return None
-    try:
-        resp = youtube.search().list(q=identifier, type="channel", part="id", maxResults=1).execute()
-        items = resp.get("items", [])
-        if items:
-            return items[0]["id"]["channelId"]
-    except Exception as e:
-        log.warning(f"YouTube search fallback failed for '{identifier}': {e}")
-    return None
+            break
+    else:
+        try:
+            resp = youtube.search().list(q=identifier, type="channel", part="id", maxResults=1).execute()
+            items = resp.get("items", [])
+            if items:
+                resolved = items[0]["id"]["channelId"]
+        except Exception as e:
+            log.warning(f"YouTube search fallback failed for '{identifier}': {e}")
 
+    if resolved:
+        cache[identifier] = resolved
+        _save_channel_cache(cache)
 
-def _get_transcript_client() -> YouTubeTranscriptApi:
-    """
-    Returns a YouTubeTranscriptApi instance routed through a Webshare proxy
-    if credentials are set, otherwise falls back to a direct (likely blocked) connection.
-    """
-    ws_user = os.environ.get("WEBSHARE_PROXY_USERNAME")
-    ws_pass = os.environ.get("WEBSHARE_PROXY_PASSWORD")
-    if ws_user and ws_pass:
-        return YouTubeTranscriptApi(
-            proxy_config=WebshareProxyConfig(
-                proxy_username=ws_user,
-                proxy_password=ws_pass,
-            )
-        )
-    log.warning("WEBSHARE_PROXY_USERNAME/PASSWORD not set — transcript fetches will likely be blocked by YouTube")
-    return YouTubeTranscriptApi()
+    return resolved
 
 
 def get_transcript(video_id: str) -> str:
     try:
-        ytt_api  = _get_transcript_client()
-        fetched  = ytt_api.fetch(video_id, languages=["en", "en-US"])
-        return " ".join(snippet.text for snippet in fetched)[:MAX_TRANSCRIPT]
-    except (NoTranscriptFound, TranscriptsDisabled):
+        ytt_api = YouTubeTranscriptApi()
+        fetched = ytt_api.fetch(video_id, languages=["en", "en-US"])
+        text = " ".join(snippet.text for snippet in fetched)[:MAX_TRANSCRIPT]
+        time.sleep(2)   # be polite to YouTube — avoid triggering rate limits
+        return text
+    except (NoTranscriptFound, TranscriptsDisabled) as e:
+        log.warning(f"    Transcript unavailable for {video_id}: {type(e).__name__}")
         return ""
     except Exception as e:
-        log.debug(f"Transcript error for {video_id}: {e}")
+        log.warning(f"    Transcript fetch error for {video_id}: {type(e).__name__}: {e}")
         return ""
 
 
@@ -273,9 +283,13 @@ def scan_youtube(client: anthropic.Anthropic, stocks: dict, seen: set, since: da
 
             bullish, bearish = analyze_content(client, content, source)
 
-            for ticker in bullish:
+            # Only mark as seen if analysis actually ran (not an API error)
+            if bullish is not None and bearish is not None:
+                seen.add(vid_id)
+
+            for ticker in (bullish or []):
                 add_stock(stocks, ticker, source)
-            for ticker in bearish:
+            for ticker in (bearish or []):
                 remove_stock(stocks, ticker, source, reason="expert bearish signal")
 
             seen.add(vid_id)
