@@ -4,6 +4,69 @@
     "sources": [
       "YouTube: Meet Kevin"
     ],
+    "mentions": 4
+  },
+  "GOOG": {
+    "added": "2026-06-21",
+    "sources": [
+      "YouTube: Meet Kevin"
+    ],
+    "mentions": 1
+  },
+  "OLLI": {
+    "added": "2026-06-22",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
     "mentions": 2
+  },
+  "CASY": {
+    "added": "2026-06-22",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 2
+  },
+  "TJX": {
+    "added": "2026-06-22",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 2
+  },
+  "MU": {
+    "added": "2026-06-22",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 2
+  },
+  "STX": {
+    "added": "2026-06-22",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 1
+  },
+  "CEG": {
+    "added": "2026-06-22",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 1
+  },
+  "NEE": {
+    "added": "2026-06-22",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 1
+  },
+  "NBIS": {
+    "added": "2026-06-22",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 1
   }
 }
