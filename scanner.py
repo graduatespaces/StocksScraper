@@ -223,7 +223,7 @@ def get_transcript(video_id: str) -> str:
         ytt_api = YouTubeTranscriptApi()
         fetched = ytt_api.fetch(video_id, languages=["en", "en-US"])
         text = " ".join(snippet.text for snippet in fetched)[:MAX_TRANSCRIPT]
-        time.sleep(2)   # be polite to YouTube — avoid triggering rate limits
+        time.sleep(5)   # be polite to YouTube — avoid triggering rate limits
         return text
     except (NoTranscriptFound, TranscriptsDisabled) as e:
         log.warning(f"    Transcript unavailable for {video_id}: {type(e).__name__}")
@@ -431,16 +431,6 @@ def main():
         save_seen(seen)
     else:
         log.info("[DRY RUN] No files were modified")
-
-    # Write a daily summary for GitHub Actions artifact
-    summary = {
-        "date":    datetime.now().strftime("%Y-%m-%d %H:%M UTC"),
-        "added":   sorted(added),
-        "removed": sorted(removed),
-        "current": sorted(after),
-        "dry_run": args.dry_run,
-    }
-    Path(f"summary_{datetime.now().strftime('%Y%m%d')}.json").write_text(json.dumps(summary, indent=2))
 
 
 if __name__ == "__main__":

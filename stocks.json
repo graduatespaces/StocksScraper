@@ -37,9 +37,10 @@
   "MU": {
     "added": "2026-06-22",
     "sources": [
-      "YouTube: MarketBeat"
+      "YouTube: MarketBeat",
+      "YouTube: Schwab Network"
     ],
-    "mentions": 3
+    "mentions": 4
   },
   "STX": {
     "added": "2026-06-22",
@@ -65,7 +66,15 @@
   "NBIS": {
     "added": "2026-06-22",
     "sources": [
-      "YouTube: MarketBeat"
+      "YouTube: MarketBeat",
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 2
+  },
+  "NVDA": {
+    "added": "2026-06-23",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
     "mentions": 1
   }
