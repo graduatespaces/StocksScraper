@@ -77,5 +77,19 @@
       "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
     "mentions": 1
+  },
+  "IBM": {
+    "added": "2026-06-23",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "TGT": {
+    "added": "2026-06-23",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
   }
 }
