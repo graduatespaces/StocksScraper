@@ -1,0 +1,4 @@
+*.log
+summary_*.json
+com.stockscanner.daily.plist
+launchd_*.log

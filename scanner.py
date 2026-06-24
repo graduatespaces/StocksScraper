@@ -66,6 +66,9 @@ def save_stocks(stocks: dict):
 
 def add_stock(stocks: dict, ticker: str, source: str):
     today = datetime.now().strftime("%Y-%m-%d")
+    # Deduplicate known aliases — always use the canonical ticker
+    aliases = {"GOOG": "GOOGL"}
+    ticker = aliases.get(ticker, ticker)
     if ticker in stocks:
         stocks[ticker]["mentions"] += 1
         if source not in stocks[ticker]["sources"]:
@@ -81,6 +84,8 @@ def add_stock(stocks: dict, ticker: str, source: str):
 
 
 def remove_stock(stocks: dict, ticker: str, source: str, reason: str):
+    aliases = {"GOOG": "GOOGL"}
+    ticker = aliases.get(ticker, ticker)
     if ticker in stocks:
         del stocks[ticker]
         log.info(f"  ❌ REMOVED {ticker} from stock list (reason: {reason}, source: {source})")
@@ -295,6 +300,97 @@ def scan_youtube(client: anthropic.Anthropic, stocks: dict, seen: set, since: da
             seen.add(vid_id)
 
 
+
+# ── Alpha Vantage News Sentiment scanner ──────────────────────────────────────
+
+# Tickers to scan for news sentiment — pulls from your core watchlist
+# plus dynamic picks in stocks.json
+AV_WATCHLIST = [
+    "NVDA", "META", "GOOGL", "MSFT", "AMD", "AVGO", "CRM", "NOW", "SNOW", "INTU",
+    "IONQ", "RGTI", "PLTR", "COIN", "HOOD", "MSTR", "NBIS", "RKLB",
+]
+AV_MIN_RELEVANCE  = 0.5    # only use articles with relevance score >= 0.5
+AV_MIN_CONFIDENCE = 0.6    # only use sentiment scores >= 0.6 confidence
+
+
+def scan_alphavantage(client: anthropic.Anthropic, stocks: dict, seen: set, since: datetime):
+    """
+    Scan Alpha Vantage News & Sentiment API for bullish/bearish signals.
+    Free API key at https://www.alphavantage.co/support/#api-key
+    Docs: https://www.alphavantage.co/documentation/#news-sentiment
+    """
+    av_key = os.environ.get("ALPHAVANTAGE_API_KEY")
+    if not av_key:
+        log.warning("ALPHAVANTAGE_API_KEY not set — skipping Alpha Vantage news scan")
+        return
+
+    import urllib.request
+
+    # Build ticker list: core watchlist + current dynamic picks
+    tickers = list(set(AV_WATCHLIST + list(stocks.keys())))
+    tickers_str = ",".join(tickers[:20])   # API allows up to 20 tickers
+
+    time_from = since.strftime("%Y%m%dT%H%M")
+    url = (
+        f"https://www.alphavantage.co/query?function=NEWS_SENTIMENT"
+        f"&tickers={tickers_str}"
+        f"&time_from={time_from}"
+        f"&limit=50"
+        f"&apikey={av_key}"
+    )
+
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            data = json.loads(resp.read())
+    except Exception as e:
+        log.warning(f"Alpha Vantage fetch failed: {e}")
+        return
+
+    articles = data.get("feed", [])
+    if not articles:
+        log.warning(f"Alpha Vantage: no articles returned (check API key or free tier limit)")
+        return
+
+    log.info(f"Alpha Vantage: {len(articles)} article(s) found")
+
+    for article in articles:
+        article_id = f"av_{article.get('url', '')[-40:]}"
+        if article_id in seen:
+            continue
+
+        title      = article.get("title", "")
+        ticker_sentiments = article.get("ticker_sentiment", [])
+
+        for ts in ticker_sentiments:
+            ticker    = ts.get("ticker", "").upper()
+            relevance = float(ts.get("relevance_score", 0))
+            score     = float(ts.get("ticker_sentiment_score", 0))
+            label     = ts.get("ticker_sentiment_label", "").lower()
+
+            # Skip low relevance or weak signals
+            if relevance < AV_MIN_RELEVANCE:
+                continue
+            if abs(score) < AV_MIN_CONFIDENCE:
+                continue
+            if not ticker.isalpha() or not (1 <= len(ticker) <= 5):
+                continue
+
+            source = f"AlphaVantage News"
+
+            if "bullish" in label:
+                add_stock(stocks, ticker, source)
+                log.info(f"    📰 Bullish: {ticker} (score={score:.2f}, relevance={relevance:.2f}) — {title[:60]}")
+            elif "bearish" in label:
+                remove_stock(stocks, ticker, source, reason="AlphaVantage bearish news sentiment")
+                log.info(f"    📰 Bearish: {ticker} (score={score:.2f}, relevance={relevance:.2f}) — {title[:60]}")
+
+        seen.add(article_id)
+        time.sleep(0.5)   # stay well within free tier rate limits
+
+
+
+
 # ── X (Twitter) scanner ───────────────────────────────────────────────────────
 
 def load_x_accounts() -> list:
@@ -416,6 +512,7 @@ def main():
     log.info(f"=== Scan started | lookback={args.days}d | existing stocks={sorted(before)} ===")
 
     scan_youtube(client, stocks, seen, since)
+    scan_alphavantage(client, stocks, seen, since)
     # X/Twitter scanning disabled — free scraping (nitter) is no longer reliable.
     # Re-enable once a paid X API or alternative source is set up.
     # scan_x(client, stocks, seen, since)

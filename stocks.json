@@ -1,11 +1,4 @@
 {
-  "GOOGL": {
-    "added": "2026-06-20",
-    "sources": [
-      "YouTube: Meet Kevin"
-    ],
-    "mentions": 4
-  },
   "GOOG": {
     "added": "2026-06-21",
     "sources": [
@@ -38,9 +31,10 @@
     "added": "2026-06-22",
     "sources": [
       "YouTube: MarketBeat",
-      "YouTube: Schwab Network"
+      "YouTube: Schwab Network",
+      "YouTube: CNBC Television"
     ],
-    "mentions": 4
+    "mentions": 8
   },
   "STX": {
     "added": "2026-06-22",
@@ -52,9 +46,10 @@
   "CEG": {
     "added": "2026-06-22",
     "sources": [
-      "YouTube: MarketBeat"
+      "YouTube: MarketBeat",
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 1
+    "mentions": 3
   },
   "NEE": {
     "added": "2026-06-22",
@@ -69,12 +64,56 @@
       "YouTube: MarketBeat",
       "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 2
+    "mentions": 3
   },
   "NVDA": {
     "added": "2026-06-23",
     "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All",
+      "YouTube: CNBC Television"
+    ],
+    "mentions": 3
+  },
+  "AMD": {
+    "added": "2026-06-23",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All",
+      "YouTube: CNBC Television"
+    ],
+    "mentions": 2
+  },
+  "VST": {
+    "added": "2026-06-23",
+    "sources": [
       "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 3
+  },
+  "AVGO": {
+    "added": "2026-06-24",
+    "sources": [
+      "YouTube: CNBC Television"
+    ],
+    "mentions": 1
+  },
+  "ARM": {
+    "added": "2026-06-24",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "QCOM": {
+    "added": "2026-06-24",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "GEV": {
+    "added": "2026-06-24",
+    "sources": [
+      "YouTube: Schwab Network"
     ],
     "mentions": 1
   },
