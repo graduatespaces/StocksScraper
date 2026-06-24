@@ -38,6 +38,12 @@ case "$1" in
     echo "🧪 Running scanner once right now (not waiting for 8am)..."
     cd "$(dirname "$0")"
     python3 scanner.py
+    echo "📤 Pushing updated stocks.json to GitHub..."
+    git add stocks.json seen_content.json channel_id_cache.json
+    git diff --cached --quiet || git commit -m "📈 Auto-update stocks.json $(date +'%Y-%m-%d')"
+    git pull --rebase origin main
+    git push
+    echo "✅ Done."
     ;;
 
   status)
