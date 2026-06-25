@@ -34,7 +34,7 @@
       "YouTube: Schwab Network",
       "YouTube: CNBC Television"
     ],
-    "mentions": 8
+    "mentions": 10
   },
   "STX": {
     "added": "2026-06-22",
@@ -49,14 +49,14 @@
       "YouTube: MarketBeat",
       "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 3
+    "mentions": 4
   },
   "NEE": {
     "added": "2026-06-22",
     "sources": [
       "YouTube: MarketBeat"
     ],
-    "mentions": 1
+    "mentions": 2
   },
   "NBIS": {
     "added": "2026-06-22",
@@ -128,6 +128,62 @@
     "added": "2026-06-23",
     "sources": [
       "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "IGV": {
+    "added": "2026-06-25",
+    "sources": [
+      "YouTube: Meet Kevin"
+    ],
+    "mentions": 1
+  },
+  "CCJ": {
+    "added": "2026-06-25",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 1
+  },
+  "UEC": {
+    "added": "2026-06-25",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 1
+  },
+  "UUUU": {
+    "added": "2026-06-25",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 1
+  },
+  "OKLO": {
+    "added": "2026-06-25",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 1
+  },
+  "SMR": {
+    "added": "2026-06-25",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 1
+  },
+  "NNE": {
+    "added": "2026-06-25",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 1
+  },
+  "BWXT": {
+    "added": "2026-06-25",
+    "sources": [
+      "YouTube: MarketBeat"
     ],
     "mentions": 1
   }
