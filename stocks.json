@@ -34,7 +34,7 @@
       "YouTube: Schwab Network",
       "YouTube: CNBC Television"
     ],
-    "mentions": 10
+    "mentions": 11
   },
   "STX": {
     "added": "2026-06-22",
@@ -92,9 +92,10 @@
   "AVGO": {
     "added": "2026-06-24",
     "sources": [
-      "YouTube: CNBC Television"
+      "YouTube: CNBC Television",
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 1
+    "mentions": 2
   },
   "ARM": {
     "added": "2026-06-24",
@@ -196,6 +197,48 @@
   },
   "CRWV": {
     "added": "2026-06-25",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "ASML": {
+    "added": "2026-06-26",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 1
+  },
+  "SNOW": {
+    "added": "2026-06-26",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "AAPL": {
+    "added": "2026-06-26",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "AMZN": {
+    "added": "2026-06-26",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "MSFT": {
+    "added": "2026-06-26",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "META": {
+    "added": "2026-06-26",
     "sources": [
       "YouTube: Schwab Network"
     ],
