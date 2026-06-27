@@ -243,5 +243,19 @@
       "YouTube: Schwab Network"
     ],
     "mentions": 1
+  },
+  "NOC": {
+    "added": "2026-06-27",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 1
+  },
+  "IONQ": {
+    "added": "2026-06-27",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
   }
 }
