@@ -2,14 +2,15 @@
 """
 Daily position sizing report.
 
-Fetches live data from Robinhood, applies seasonal + regime + RSI rules
-from seasonal_sizing.py, and prints recommended allocations for today.
+Fetches live data from Robinhood, applies seasonal + regime + bear-signal
+rules from seasonal_sizing.py and bear_score.py, and prints recommended
+allocations for today.
 
 Usage:
     python daily_sizing.py
 
 Requires:
-    pip install robin_stocks numpy
+    pip install robin_stocks
 
 Environment:
     ROBINHOOD_USERNAME, ROBINHOOD_PASSWORD
@@ -18,22 +19,29 @@ Environment:
 import json
 import os
 import sys
-from datetime import date, datetime, timezone, timedelta
+from datetime import date, timedelta
 from pathlib import Path
 
 from seasonal_sizing import get_allocation, SYMBOL_TYPE
+from bear_score import (
+    compute_rsi14,
+    compute_bear_score,
+    size_multiplier,
+    describe_bear_score,
+)
 
 CORE_SYMBOLS       = list(SYMBOL_TYPE.keys())   # NVDA, AVGO, MSFT, META, GOOGL, SPY
 STOCKS_FILE        = Path(__file__).parent / "stocks.json"
 ACCOUNT_NUMBER     = "699589594"
-QEND_DAYS          = 6
-NEW_Q_DAYS         = 7
 QUARTER_END_MONTHS = {3, 6, 9, 12}
 QUARTER_STR_MONTHS = {1, 4, 7, 10}
-WIN_RATE_HALVE     = True   # ACTIVE as of Jun 2026 — update when win rate recovers
+QEND_DAYS          = 6
+NEW_Q_DAYS         = 7
+WIN_RATE_HALVE     = True   # ACTIVE as of Jun 2026 — set False when win rate recovers
+VIX_INSTRUMENT_ID  = "3b912aa2-88f9-4682-8ae3-e39520bdf4db"
 
 
-# ── Robinhood login ───────────────────────────────────────────────────────────
+# ── Robinhood ─────────────────────────────────────────────────────────────────
 
 def _rh():
     try:
@@ -53,10 +61,9 @@ def login(rh):
     rh.login(username, password, store_session=True)
 
 
-# ── Market data helpers ───────────────────────────────────────────────────────
+# ── Market data ───────────────────────────────────────────────────────────────
 
 def fetch_daily_closes(rh, symbol: str, span: str = "year") -> tuple[list[date], list[float]]:
-    """Return (dates, closes) for the given span using daily bars."""
     bars = rh.stocks.get_stock_historicals(
         symbol, interval="day", span=span, bounds="regular"
     )
@@ -67,38 +74,26 @@ def fetch_daily_closes(rh, symbol: str, span: str = "year") -> tuple[list[date],
     return dates, closes
 
 
-def compute_rsi14(closes: list[float]) -> float | None:
-    """RSI-14 via EWM smoothing (com=13), requires at least 20 closes."""
-    if len(closes) < 20:
-        return None
-    closes = closes[-20:]
-    deltas = [closes[i] - closes[i - 1] for i in range(1, len(closes))]
-    gains  = [max(d, 0.0) for d in deltas]
-    losses = [abs(min(d, 0.0)) for d in deltas]
-
-    alpha    = 1 / 14
-    avg_gain = gains[0]
-    avg_loss = losses[0]
-    for g, l in zip(gains[1:], losses[1:]):
-        avg_gain = alpha * g + (1 - alpha) * avg_gain
-        avg_loss = alpha * l + (1 - alpha) * avg_loss
-
-    if avg_loss == 0:
-        return 100.0
-    return 100 - (100 / (1 + avg_gain / avg_loss))
+def fetch_vix(rh) -> float | None:
+    try:
+        quotes = rh.get_index_quotes([VIX_INSTRUMENT_ID])
+        if quotes:
+            return float(quotes[0].get("value") or quotes[0].get("last_trade_price") or 0) or None
+    except Exception:
+        pass
+    return None
 
 
-# ── Regime ────────────────────────────────────────────────────────────────────
+# ── Regime (hard stop layer, separate from bear score) ───────────────────────
 
 def compute_regime(closes: list[float]) -> tuple[str, float, float]:
-    """Return (regime, sma50, sma200) from SPY closes (need 200+)."""
+    """Hard regime: drives the no-new-entry block in RISK_OFF / DIP_BUYING."""
     if len(closes) < 200:
         return "RISK_ON", 0.0, 0.0
     sma50  = sum(closes[-50:])  / 50
     sma200 = sum(closes[-200:]) / 200
     last   = closes[-1]
-
-    if last < sma200 * 0.95:    # 5%+ below 200d → dip-buying zone
+    if last < sma200 * 0.95:
         regime = "DIP_BUYING"
     elif last < sma200:
         regime = "RISK_OFF"
@@ -106,50 +101,34 @@ def compute_regime(closes: list[float]) -> tuple[str, float, float]:
         regime = "EARLY_WARNING"
     else:
         regime = "RISK_ON"
-
     return regime, sma50, sma200
 
 
-# ── Trading calendar helpers ──────────────────────────────────────────────────
+# ── Trading calendar ──────────────────────────────────────────────────────────
 
 def trading_day_info(spy_dates: list[date], today: date) -> tuple[int, int, bool, bool]:
-    """
-    Derive position-in-month and quarter window flags from SPY trading dates.
-
-    Returns:
-        trading_day_of_month        1-indexed day within the current month
-        total_trading_days_in_month total trading days in the current month
-        is_qend                     True if within last QEND_DAYS of quarter
-        is_newq                     True if within first NEW_Q_DAYS of quarter
-    """
-    # Days in current calendar month from the historical record
     month_days = sorted(d for d in spy_dates if d.year == today.year and d.month == today.month)
-
-    # If today isn't in the record yet (market not closed / weekend), append it
     if today not in month_days:
         month_days = sorted(set(month_days) | {today})
 
-    total_trading_days_in_month = len(month_days)
-    trading_day_of_month = month_days.index(today) + 1
+    total   = len(month_days)
+    td      = month_days.index(today) + 1
 
-    # Q-end: last QEND_DAYS trading days of Mar / Jun / Sep / Dec
-    is_qend = False
-    if today.month in QUARTER_END_MONTHS:
-        remaining = sum(1 for d in month_days if d >= today)
-        is_qend   = remaining <= QEND_DAYS
+    is_qend = (
+        today.month in QUARTER_END_MONTHS and
+        sum(1 for d in month_days if d >= today) <= QEND_DAYS
+    )
+    is_newq = today.month in QUARTER_STR_MONTHS and td <= NEW_Q_DAYS
 
-    # New-Q: first NEW_Q_DAYS trading days of Jan / Apr / Jul / Oct
-    is_newq = today.month in QUARTER_STR_MONTHS and trading_day_of_month <= NEW_Q_DAYS
-
-    return trading_day_of_month, total_trading_days_in_month, is_qend, is_newq
+    return td, total, is_qend, is_newq
 
 
-# ── Account equity ────────────────────────────────────────────────────────────
+# ── Account ───────────────────────────────────────────────────────────────────
 
 def fetch_equity(rh) -> float | None:
     try:
         profile = rh.account.build_user_profile()
-        return float(profile.get("equity", 0) or 0)
+        return float(profile.get("equity", 0) or 0) or None
     except Exception:
         return None
 
@@ -159,14 +138,13 @@ def fetch_equity(rh) -> float | None:
 def main():
     rh = _rh()
     login(rh)
-
     today = date.today()
 
     print(f"\n{'=' * 72}")
     print(f"  Daily Sizing Report — {today.strftime('%A, %b %d %Y')}")
     print(f"{'=' * 72}\n")
 
-    # SPY: regime + trading calendar
+    # ── SPY: regime, calendar, bear score inputs ──────────────────────────────
     spy_dates, spy_closes = fetch_daily_closes(rh, "SPY", span="year")
     if not spy_closes:
         print("ERROR: Could not fetch SPY historicals")
@@ -176,50 +154,74 @@ def main():
     spy_last = spy_closes[-1]
 
     print(f"  SPY       ${spy_last:>8.2f}  |  50d SMA ${sma50:.2f}  |  200d SMA ${sma200:.2f}")
-    print(f"  Regime    {regime}")
+    print(f"  Regime    {regime}  (hard stop layer)")
 
     td_of_month, total_td_month, is_qend, is_newq = trading_day_info(spy_dates, today)
-    month_name = today.strftime("%B")
-    print(f"  Month     {month_name}  — trading day {td_of_month} of {total_td_month}")
-    print(f"  Q-end     {'YES ✓ (last 6 trading days of quarter)' if is_qend else 'no'}")
-    print(f"  New-Q     {'YES ✓ (first 7 trading days of quarter)' if is_newq else 'no'}")
+    print(f"  Month     {today.strftime('%B')}  — trading day {td_of_month} of {total_td_month}")
+    print(f"  Q-end     {'YES ✓' if is_qend else 'no'}   |   New-Q  {'YES ✓' if is_newq else 'no'}")
 
-    # Account equity + base size
+    # ── Fetch all symbol closes (needed for breadth + RSI) ───────────────────
+    all_closes: dict[str, list[float]] = {'SPY': spy_closes}
+    for sym in CORE_SYMBOLS:
+        if sym == 'SPY':
+            continue
+        _, c = fetch_daily_closes(rh, sym, span="year")
+        if c:
+            all_closes[sym] = c
+
+    # ── VIX ──────────────────────────────────────────────────────────────────
+    vix = fetch_vix(rh)
+
+    # ── Bear score ────────────────────────────────────────────────────────────
+    bear, components = compute_bear_score(spy_closes, all_closes, vix)
+    bear_mult = size_multiplier(bear)
+    describe_bear_score(bear, components, vix)
+
+    # ── Account equity + base size ────────────────────────────────────────────
     equity    = fetch_equity(rh)
     base_size = None
     if equity:
         base_size = equity * 0.10
+        adjustments = []
         if WIN_RATE_HALVE:
             base_size *= 0.50
+            adjustments.append("×0.50 win-rate halve")
+        base_size *= bear_mult
+        adjustments.append(f"×{bear_mult:.2f} bear score")
         print(f"\n  Account equity  ${equity:>12,.2f}")
-        print(f"  Base size (10%){' × 0.5 win-rate halve' if WIN_RATE_HALVE else '':25s}  ${base_size:>10,.2f}")
+        print(f"  Base size       ${base_size:>12,.2f}  (10% {' '.join(adjustments)})")
     else:
         print("\n  (Account equity unavailable — showing fractions only)")
 
-    # Dynamic symbols from stocks.json (treated as balanced_strict)
-    dynamic_symbols = []
+    # ── Dynamic symbols from stocks.json ─────────────────────────────────────
+    dynamic_symbols: list[str] = []
     if STOCKS_FILE.exists():
-        scanner_picks = json.loads(STOCKS_FILE.read_text())
-        dynamic_symbols = [s for s in sorted(scanner_picks) if s not in CORE_SYMBOLS]
+        picks = json.loads(STOCKS_FILE.read_text())
+        dynamic_symbols = [s for s in sorted(picks) if s not in CORE_SYMBOLS]
 
-    all_sections = [
+    # ── Per-symbol sizing ─────────────────────────────────────────────────────
+    sections = [
         ("Core strategy symbols", CORE_SYMBOLS),
-        ("Scanner picks (balanced_strict rules)", dynamic_symbols),
+        ("Scanner picks  (balanced_strict rules)", dynamic_symbols),
     ]
 
-    for section_title, symbols in all_sections:
+    for title, symbols in sections:
         if not symbols:
             continue
-        print(f"\n  {section_title}")
+        print(f"\n  {title}")
         print(f"  {'Symbol':<7} {'Type':<16} {'RSI':>6}  {'Alloc':>6}  {'$ Size':>10}  Flags")
         print(f"  {'-'*68}")
 
         for symbol in symbols:
-            try:
-                _, closes = fetch_daily_closes(rh, symbol, span="3month")
-                rsi = compute_rsi14(closes)
-            except Exception:
-                rsi = None
+            closes = all_closes.get(symbol)
+            if closes is None:
+                try:
+                    _, closes = fetch_daily_closes(rh, symbol, span="3month")
+                    all_closes[symbol] = closes
+                except Exception:
+                    closes = []
+
+            rsi = compute_rsi14(closes) if closes else None
 
             alloc = get_allocation(
                 symbol=symbol,
@@ -248,9 +250,9 @@ def main():
 
     print(f"\n  {'=' * 72}")
     if WIN_RATE_HALVE:
-        print("  * Win-rate halve ACTIVE (30d win rate < 35%) — base size × 0.5")
-    print(f"  $ Size = base_size × seasonal_alloc (regime cap already applied in alloc)")
-    print(f"  Max 6 positions. T+1 settlement — do not reuse unsettled proceeds.")
+        print("  * Win-rate halve ACTIVE — set WIN_RATE_HALVE=False when 30d rate recovers above 35%")
+    print(f"  $ Size = base_size × seasonal_alloc  (bear score already baked into base_size)")
+    print(f"  Max 6 positions.  T+1 settlement — never reuse unsettled proceeds.")
     print(f"  {'=' * 72}\n")
 
 
