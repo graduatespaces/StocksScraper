@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 """
-Seasonal position sizing — Final rule set from v4 backtest (Jun 2026).
+Seasonal position sizing — v4 rule set (Jun 2026), with adaptive thresholds.
 
 Returns target allocation fraction (0.0–1.0) for a given symbol/date/RSI/regime.
 Multiply the result by base_position_size to get the final dollar amount.
 
-Derived from 4-version backtest series (2018–2025). Key findings:
-  - momentum (NVDA/AVGO/MSFT): 90% floor in neg-bias months → near buy-and-hold CAGR
-  - balanced (META): binary exit, 30% exit window → within 0.7% of binary CAGR
-  - balanced-strict (GOOGL/SPY): binary exit, 60% exit window → binary B still best
+Hardcoded constants are used as fallbacks. If calibrated_params.json exists
+(written by calibrate.py), its values override the defaults automatically.
 
 Usage:
     from seasonal_sizing import get_allocation, describe_allocation
@@ -25,6 +23,9 @@ Usage:
     )
     # returns 0.90  (90% floor — Sep is negative-bias, momentum type)
 """
+
+import json
+from pathlib import Path
 
 # ─── SYMBOL CLASSIFICATION ────────────────────────────────────────────────────
 
@@ -91,11 +92,49 @@ ALLOC = {
     },
 }
 
-# ─── UNIVERSAL THRESHOLDS ────────────────────────────────────────────────────
+# ─── UNIVERSAL THRESHOLDS (defaults — overridden by calibrated_params.json) ──
 
-RSI_OVERSOLD = 45    # override to full size when RSI < this
-QEND_DAYS    = 6     # last N trading days of quarter
-NEW_Q_DAYS   = 7     # first N trading days of quarter
+_RSI_OVERSOLD_DEFAULT = 45
+_QEND_DAYS_DEFAULT    = 6
+_NEW_Q_DAYS_DEFAULT   = 7
+
+# ─── LOAD CALIBRATED PARAMS ──────────────────────────────────────────────────
+
+_PARAMS_FILE = Path(__file__).parent / "calibrated_params.json"
+
+def _load_calibrated_params() -> dict:
+    if _PARAMS_FILE.exists():
+        try:
+            return json.loads(_PARAMS_FILE.read_text())
+        except Exception:
+            pass
+    return {}
+
+_CALIBRATED = _load_calibrated_params()
+
+RSI_OVERSOLD        = _RSI_OVERSOLD_DEFAULT   # per-symbol override via get_rsi_threshold()
+QEND_DAYS           = _CALIBRATED.get("qend_days", _QEND_DAYS_DEFAULT)
+NEW_Q_DAYS          = _CALIBRATED.get("newq_days", _NEW_Q_DAYS_DEFAULT)
+_RSI_BY_SYMBOL      = _CALIBRATED.get("rsi_threshold", {})
+_EXIT_WINDOW_BY_SYM = _CALIBRATED.get("exit_window_fraction", {})
+
+_CALIBRATED_AT = _CALIBRATED.get("calibrated_at", "hardcoded defaults")
+
+
+def get_rsi_threshold(symbol: str) -> float:
+    """Return calibrated RSI oversold threshold for symbol, or global default."""
+    return _RSI_BY_SYMBOL.get(symbol, RSI_OVERSOLD)
+
+
+def get_exit_window_fraction(symbol: str, month: int) -> float | None:
+    """
+    Return calibrated exit window fraction for a binary-exit symbol + month,
+    or fall back to NEG_EARLY_CUTOFF hardcoded value.
+    """
+    sym_windows = _EXIT_WINDOW_BY_SYM.get(symbol)
+    if sym_windows:
+        return sym_windows.get(str(month))
+    return None
 
 # ─── REGIME CAPS ──────────────────────────────────────────────────────────────
 
@@ -140,11 +179,15 @@ def get_allocation(
     if regime == 'RISK_OFF':
         return 0.0
 
-    sym_type = SYMBOL_TYPE.get(symbol, 'balanced_strict')
-    cfg      = ALLOC[sym_type]
-    bias     = MONTHLY_BIAS.get(month, 0)
-    cutoff   = NEG_EARLY_CUTOFF[sym_type]
-    oversold = (rsi is not None) and (rsi < RSI_OVERSOLD)
+    sym_type      = SYMBOL_TYPE.get(symbol, 'balanced_strict')
+    cfg           = ALLOC[sym_type]
+    bias          = MONTHLY_BIAS.get(month, 0)
+    rsi_threshold = get_rsi_threshold(symbol)
+    oversold      = (rsi is not None) and (rsi < rsi_threshold)
+
+    # Use calibrated exit window if available, else hardcoded NEG_EARLY_CUTOFF
+    calibrated_cutoff = get_exit_window_fraction(symbol, month)
+    cutoff = calibrated_cutoff if calibrated_cutoff is not None else NEG_EARLY_CUTOFF[sym_type]
 
     # Priority: overrides first, then seasonal
     is_override = False
