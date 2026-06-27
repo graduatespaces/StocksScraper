@@ -321,9 +321,27 @@ def calibrate_newq_days(
 
 # ── Main calibration runner ────────────────────────────────────────────────────────────
 
+def _all_symbols() -> list[str]:
+    """Core symbols + any dynamic picks from stocks.json, deduped and sorted."""
+    from seasonal_sizing import SYMBOL_TYPE
+    core = list(SYMBOL_TYPE.keys())
+    stocks_file = Path(__file__).parent / "stocks.json"
+    dynamic = []
+    if stocks_file.exists():
+        try:
+            dynamic = list(json.loads(stocks_file.read_text()).keys())
+        except Exception:
+            pass
+    seen = set(core)
+    extras = [s for s in dynamic if s not in seen]
+    return core + sorted(extras)
+
+
 def run_calibration(rh) -> dict:
     from seasonal_sizing import SYMBOL_TYPE
-    symbols = list(SYMBOL_TYPE.keys())
+    symbols = _all_symbols()
+
+    print(f"  Symbols to calibrate: {symbols}\n")
 
     params: dict = {
         "calibrated_at":        datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -345,11 +363,14 @@ def run_calibration(rh) -> dict:
         if symbol == "SPY":
             spy_dates, spy_closes = dates, closes
 
-        # RSI threshold (all symbols)
+        # RSI threshold for every symbol
         params["rsi_threshold"][symbol] = calibrate_rsi_threshold(dates, closes, symbol)
 
-        # Exit window (binary-exit symbols only)
-        if symbol in BINARY_EXIT_SYMBOLS:
+        # Exit window: core binary-exit symbols + all dynamic scanner picks
+        # (scanner picks default to balanced_strict = binary exit)
+        is_core_binary = symbol in BINARY_EXIT_SYMBOLS
+        is_dynamic      = symbol not in SYMBOL_TYPE
+        if is_core_binary or is_dynamic:
             params["exit_window_fraction"][symbol] = calibrate_exit_window(
                 dates, closes, symbol
             )
