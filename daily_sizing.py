@@ -15,13 +15,16 @@ Environment:
     ROBINHOOD_USERNAME, ROBINHOOD_PASSWORD
 """
 
+import json
 import os
 import sys
 from datetime import date, datetime, timezone, timedelta
+from pathlib import Path
 
 from seasonal_sizing import get_allocation, SYMBOL_TYPE
 
-SYMBOLS            = list(SYMBOL_TYPE.keys())   # NVDA, AVGO, MSFT, META, GOOGL, SPY
+CORE_SYMBOLS       = list(SYMBOL_TYPE.keys())   # NVDA, AVGO, MSFT, META, GOOGL, SPY
+STOCKS_FILE        = Path(__file__).parent / "stocks.json"
 ACCOUNT_NUMBER     = "699589594"
 QEND_DAYS          = 6
 NEW_Q_DAYS         = 7
@@ -193,41 +196,55 @@ def main():
     else:
         print("\n  (Account equity unavailable — showing fractions only)")
 
-    # Per-symbol sizing
-    print(f"\n  {'Symbol':<7} {'Type':<16} {'RSI':>6}  {'Alloc':>6}  {'$ Size':>10}  Flags")
-    print(f"  {'-'*68}")
+    # Dynamic symbols from stocks.json (treated as balanced_strict)
+    dynamic_symbols = []
+    if STOCKS_FILE.exists():
+        scanner_picks = json.loads(STOCKS_FILE.read_text())
+        dynamic_symbols = [s for s in sorted(scanner_picks) if s not in CORE_SYMBOLS]
 
-    for symbol in SYMBOLS:
-        try:
-            _, closes = fetch_daily_closes(rh, symbol, span="3month")
-            rsi = compute_rsi14(closes)
-        except Exception:
-            rsi = None
+    all_sections = [
+        ("Core strategy symbols", CORE_SYMBOLS),
+        ("Scanner picks (balanced_strict rules)", dynamic_symbols),
+    ]
 
-        alloc = get_allocation(
-            symbol=symbol,
-            month=today.month,
-            rsi=rsi,
-            trading_day_of_month=td_of_month,
-            total_trading_days_in_month=total_td_month,
-            is_qend=is_qend,
-            is_newq=is_newq,
-            regime=regime,
-        )
+    for section_title, symbols in all_sections:
+        if not symbols:
+            continue
+        print(f"\n  {section_title}")
+        print(f"  {'Symbol':<7} {'Type':<16} {'RSI':>6}  {'Alloc':>6}  {'$ Size':>10}  Flags")
+        print(f"  {'-'*68}")
 
-        rsi_str  = f"{rsi:5.1f}" if rsi is not None else "  N/A"
-        size_str = f"${base_size * alloc:>9,.0f}" if base_size is not None else "         —"
-        sym_type = SYMBOL_TYPE.get(symbol, "balanced_strict")
+        for symbol in symbols:
+            try:
+                _, closes = fetch_daily_closes(rh, symbol, span="3month")
+                rsi = compute_rsi14(closes)
+            except Exception:
+                rsi = None
 
-        flags = []
-        if rsi is not None and rsi < 45:
-            flags.append("RSI<45")
-        if is_qend:
-            flags.append("Q-end")
-        if is_newq:
-            flags.append("New-Q")
+            alloc = get_allocation(
+                symbol=symbol,
+                month=today.month,
+                rsi=rsi,
+                trading_day_of_month=td_of_month,
+                total_trading_days_in_month=total_td_month,
+                is_qend=is_qend,
+                is_newq=is_newq,
+                regime=regime,
+            )
 
-        print(f"  {symbol:<7} {sym_type:<16} {rsi_str}  {alloc:>5.0%}  {size_str}  {', '.join(flags)}")
+            rsi_str  = f"{rsi:5.1f}" if rsi is not None else "  N/A"
+            size_str = f"${base_size * alloc:>9,.0f}" if base_size is not None else "         —"
+            sym_type = SYMBOL_TYPE.get(symbol, "balanced_strict")
+
+            flags = []
+            if rsi is not None and rsi < 45:
+                flags.append("RSI<45")
+            if is_qend:
+                flags.append("Q-end")
+            if is_newq:
+                flags.append("New-Q")
+
+            print(f"  {symbol:<7} {sym_type:<16} {rsi_str}  {alloc:>5.0%}  {size_str}  {', '.join(flags)}")
 
     print(f"\n  {'=' * 72}")
     if WIN_RATE_HALVE:
