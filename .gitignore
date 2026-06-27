@@ -2,3 +2,6 @@
 summary_*.json
 com.stockscanner.daily.plist
 launchd_*.log
+__pycache__/
+*.pyc
+*.pyo
