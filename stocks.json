@@ -114,9 +114,10 @@
   "GEV": {
     "added": "2026-06-24",
     "sources": [
-      "YouTube: Schwab Network"
+      "YouTube: Schwab Network",
+      "YouTube: MarketBeat"
     ],
-    "mentions": 1
+    "mentions": 2
   },
   "IBM": {
     "added": "2026-06-23",
@@ -226,9 +227,10 @@
   "AMZN": {
     "added": "2026-06-26",
     "sources": [
-      "YouTube: Schwab Network"
+      "YouTube: Schwab Network",
+      "YouTube: Dumb Money Live"
     ],
-    "mentions": 1
+    "mentions": 2
   },
   "MSFT": {
     "added": "2026-06-26",
@@ -253,6 +255,13 @@
   },
   "IONQ": {
     "added": "2026-06-27",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "INTC": {
+    "added": "2026-06-28",
     "sources": [
       "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
