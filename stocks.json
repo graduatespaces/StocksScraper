@@ -34,7 +34,7 @@
       "YouTube: Schwab Network",
       "YouTube: CNBC Television"
     ],
-    "mentions": 11
+    "mentions": 12
   },
   "STX": {
     "added": "2026-06-22",
@@ -114,9 +114,10 @@
   "GEV": {
     "added": "2026-06-24",
     "sources": [
-      "YouTube: Schwab Network"
+      "YouTube: Schwab Network",
+      "YouTube: MarketBeat"
     ],
-    "mentions": 1
+    "mentions": 2
   },
   "IBM": {
     "added": "2026-06-23",
@@ -226,9 +227,10 @@
   "AMZN": {
     "added": "2026-06-26",
     "sources": [
-      "YouTube: Schwab Network"
+      "YouTube: Schwab Network",
+      "YouTube: Dumb Money Live"
     ],
-    "mentions": 1
+    "mentions": 2
   },
   "MSFT": {
     "added": "2026-06-26",
