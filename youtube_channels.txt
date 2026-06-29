@@ -2,17 +2,21 @@
 # Supports: @handle, full URL, or UCxxxxxxx channel ID
 # Lines starting with # are ignored
 
-@InvestingWithTom
-@AndreiJikh
+# Stock picks + macro
 @MeetKevin
-@MarketBeatMedia
-@morningstar
-@GrahamStephan
 @RickOrford
+@MarketBeatMedia
 @CNBCtelevision
-@GoldmanSachs
 @SchwabNetwork
 @DumbMoneyLive
+@InvestingWithTom
+@InvestorsBusinessDaily
 
-https://www.youtube.com/@JosephCarlson
-https://www.youtube.com/@NewMoneyYouTube
+# Macro / regime reads
+@GoldmanSachs
+@morningstar
+@BloombergTelevision
+
+# Tech / momentum focus
+@CathieWood
+https://www.youtube.com/@StockAnalysis
