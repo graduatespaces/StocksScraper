@@ -32,6 +32,7 @@ from bear_score import (
 
 CORE_SYMBOLS       = list(SYMBOL_TYPE.keys())   # NVDA, AVGO, MSFT, META, GOOGL, SPY
 STOCKS_FILE        = Path(__file__).parent / "stocks.json"
+MACRO_FILE         = Path(__file__).parent / "macro_signals.json"
 ACCOUNT_NUMBER     = "699589594"
 QUARTER_END_MONTHS = {3, 6, 9, 12}
 QUARTER_STR_MONTHS = {1, 4, 7, 10}
@@ -39,6 +40,64 @@ QEND_DAYS          = 6
 NEW_Q_DAYS         = 7
 WIN_RATE_HALVE     = True   # ACTIVE as of Jun 2026 — set False when win rate recovers
 VIX_INSTRUMENT_ID  = "3b912aa2-88f9-4682-8ae3-e39520bdf4db"
+
+
+# ── Macro signals ─────────────────────────────────────────────────────────────
+
+def print_macro_consensus(lookback_days: int = 7):
+    if not MACRO_FILE.exists():
+        return
+    signals = json.loads(MACRO_FILE.read_text())
+    if not signals:
+        return
+
+    cutoff = (date.today() - timedelta(days=lookback_days)).isoformat()
+    recent = [s for s in signals if s.get("date", "") >= cutoff]
+    if not recent:
+        return
+
+    bias_counts = {"bullish": 0, "bearish": 0, "neutral": 0}
+    vix_counts  = {"rising": 0, "falling": 0, "stable": 0}
+    sector_agg: dict[str, list[str]] = {}
+    all_risks: list[str] = []
+
+    for s in recent:
+        if s.get("market_bias") in bias_counts:
+            bias_counts[s["market_bias"]] += 1
+        if s.get("vix_outlook") in vix_counts:
+            vix_counts[s["vix_outlook"]] += 1
+        for sector, lean in (s.get("sectors") or {}).items():
+            sector_agg.setdefault(sector, []).append(lean)
+        all_risks.extend(s.get("risks") or [])
+
+    total = len(recent)
+    bull  = bias_counts["bullish"]
+    bear  = bias_counts["bearish"]
+    net   = "BULLISH" if bull > bear else ("BEARISH" if bear > bull else "MIXED")
+
+    print(f"\n  Analyst Macro Consensus  (last {lookback_days}d — {total} signal(s))")
+    print(f"  {'-'*68}")
+    print(f"  Market bias   {net}  ({bull} bullish / {bear} bearish / {bias_counts['neutral']} neutral)")
+
+    vix_top = max(vix_counts, key=lambda k: vix_counts[k])
+    if vix_counts[vix_top] > 0:
+        print(f"  VIX outlook   {vix_top.upper()}  ({vix_counts[vix_top]} of {total} analysts)")
+
+    if sector_agg:
+        sector_summary = []
+        for sector, leans in sorted(sector_agg.items()):
+            dominant = max(set(leans), key=leans.count)
+            sector_summary.append(f"{sector}:{dominant}")
+        print(f"  Sector leans  {',  '.join(sector_summary)}")
+
+    if all_risks:
+        from collections import Counter
+        top_risks = [r for r, _ in Counter(all_risks).most_common(4)]
+        print(f"  Key risks     {' | '.join(top_risks)}")
+
+    print(f"\n  Recent summaries:")
+    for s in sorted(recent, key=lambda x: x["date"], reverse=True)[:4]:
+        print(f"    [{s['date']}] {s['source']}: {s['summary']}")
 
 
 # ── Robinhood ─────────────────────────────────────────────────────────────────
@@ -143,6 +202,9 @@ def main():
     print(f"\n{'=' * 72}")
     print(f"  Daily Sizing Report — {today.strftime('%A, %b %d %Y')}")
     print(f"{'=' * 72}\n")
+
+    # ── Analyst macro consensus (from scanner's macro_signals.json) ──────────
+    print_macro_consensus()
 
     # ── SPY: regime, calendar, bear score inputs ──────────────────────────────
     spy_dates, spy_closes = fetch_daily_closes(rh, "SPY", span="year")

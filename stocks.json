@@ -32,9 +32,10 @@
     "sources": [
       "YouTube: MarketBeat",
       "YouTube: Schwab Network",
-      "YouTube: CNBC Television"
+      "YouTube: CNBC Television",
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 11
+    "mentions": 13
   },
   "STX": {
     "added": "2026-06-22",
@@ -192,10 +193,9 @@
   "VRT": {
     "added": "2026-06-25",
     "sources": [
-      "YouTube: Rick Orford - Trading Stocks and Options For All",
-      "YouTube: MarketBeat"
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 2
+    "mentions": 1
   },
   "CRWV": {
     "added": "2026-06-25",
@@ -247,13 +247,6 @@
     ],
     "mentions": 1
   },
-  "NOC": {
-    "added": "2026-06-27",
-    "sources": [
-      "YouTube: MarketBeat"
-    ],
-    "mentions": 1
-  },
   "IONQ": {
     "added": "2026-06-27",
     "sources": [
@@ -261,49 +254,7 @@
     ],
     "mentions": 1
   },
-  "INTC": {
-    "added": "2026-06-28",
-    "sources": [
-      "YouTube: Rick Orford - Trading Stocks and Options For All"
-    ],
-    "mentions": 1
-  },
-  "APH": {
-    "added": "2026-06-29",
-    "sources": [
-      "YouTube: MarketBeat"
-    ],
-    "mentions": 1
-  },
-  "GLW": {
-    "added": "2026-06-29",
-    "sources": [
-      "YouTube: MarketBeat"
-    ],
-    "mentions": 1
-  },
-  "CIEN": {
-    "added": "2026-06-29",
-    "sources": [
-      "YouTube: MarketBeat"
-    ],
-    "mentions": 1
-  },
-  "ETN": {
-    "added": "2026-06-29",
-    "sources": [
-      "YouTube: MarketBeat"
-    ],
-    "mentions": 1
-  },
-  "PWR": {
-    "added": "2026-06-29",
-    "sources": [
-      "YouTube: MarketBeat"
-    ],
-    "mentions": 1
-  },
-  "TSM": {
+  "TER": {
     "added": "2026-06-29",
     "sources": [
       "YouTube: Rick Orford - Trading Stocks and Options For All"
@@ -314,13 +265,6 @@
     "added": "2026-06-29",
     "sources": [
       "YouTube: Rick Orford - Trading Stocks and Options For All"
-    ],
-    "mentions": 1
-  },
-  "RBLX": {
-    "added": "2026-06-29",
-    "sources": [
-      "YouTube: Schwab Network"
     ],
     "mentions": 1
   }
