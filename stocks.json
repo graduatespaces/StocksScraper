@@ -32,9 +32,10 @@
     "sources": [
       "YouTube: MarketBeat",
       "YouTube: Schwab Network",
-      "YouTube: CNBC Television"
+      "YouTube: CNBC Television",
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 12
+    "mentions": 13
   },
   "STX": {
     "added": "2026-06-22",
@@ -246,15 +247,22 @@
     ],
     "mentions": 1
   },
-  "NOC": {
+  "IONQ": {
     "added": "2026-06-27",
     "sources": [
-      "YouTube: MarketBeat"
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
     "mentions": 1
   },
-  "IONQ": {
-    "added": "2026-06-27",
+  "TER": {
+    "added": "2026-06-29",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "MRVL": {
+    "added": "2026-06-29",
     "sources": [
       "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
