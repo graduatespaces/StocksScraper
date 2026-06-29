@@ -192,9 +192,10 @@
   "VRT": {
     "added": "2026-06-25",
     "sources": [
-      "YouTube: Rick Orford - Trading Stocks and Options For All"
+      "YouTube: Rick Orford - Trading Stocks and Options For All",
+      "YouTube: MarketBeat"
     ],
-    "mentions": 1
+    "mentions": 2
   },
   "CRWV": {
     "added": "2026-06-25",
@@ -264,6 +265,62 @@
     "added": "2026-06-28",
     "sources": [
       "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "APH": {
+    "added": "2026-06-29",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 1
+  },
+  "GLW": {
+    "added": "2026-06-29",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 1
+  },
+  "CIEN": {
+    "added": "2026-06-29",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 1
+  },
+  "ETN": {
+    "added": "2026-06-29",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 1
+  },
+  "PWR": {
+    "added": "2026-06-29",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 1
+  },
+  "TSM": {
+    "added": "2026-06-29",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "MRVL": {
+    "added": "2026-06-29",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "RBLX": {
+    "added": "2026-06-29",
+    "sources": [
+      "YouTube: Schwab Network"
     ],
     "mentions": 1
   }
