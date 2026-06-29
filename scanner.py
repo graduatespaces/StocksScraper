@@ -36,8 +36,10 @@ YOUTUBE_CHANNELS_FILE = Path("youtube_channels.txt")
 X_ACCOUNTS_FILE       = Path("x_accounts.txt")
 STOCKS_FILE           = Path("stocks.json")
 SEEN_FILE             = Path("seen_content.json")
+MACRO_FILE            = Path("macro_signals.json")
 MAX_TRANSCRIPT        = 8000
 MAX_VIDEOS_PER_CHAN   = 5
+MACRO_RETENTION_DAYS  = 14
 
 
 # ── stocks.json helpers ───────────────────────────────────────────────────────
@@ -123,6 +125,28 @@ Rules:
 - Uppercase tickers only, 1-5 letters, US stocks
 - Empty arrays if nothing qualifies"""
 
+MACRO_PROMPT = """You are a market analyst. Given content from a financial YouTube video or podcast,
+extract macro/market-level signals. Only populate fields where the content explicitly addresses them.
+
+Return ONLY a JSON object in this exact format, no other text:
+{
+  "is_macro": true,
+  "market_bias": "bullish",
+  "vix_outlook": "stable",
+  "sectors": {"tech": "bullish", "energy": "neutral"},
+  "risks": ["Fed rate decision", "earnings season"],
+  "summary": "One sentence capturing the analyst's key market view."
+}
+
+Rules:
+- is_macro: true only if the content discusses broad market direction, macro conditions, or sector rotation. false if it is purely stock picks with no macro context.
+- market_bias: "bullish", "bearish", or "neutral". null if not discussed.
+- vix_outlook: "rising", "falling", or "stable". null if not discussed.
+- sectors: object mapping sector names to "bullish"/"bearish"/"neutral". Omit sectors not discussed.
+- risks: list of specific risks named (e.g. "Fed rate hike", "recession fears", "earnings miss"). Empty array if none named.
+- summary: one sentence. Empty string if is_macro is false.
+If is_macro is false, return: {"is_macro": false, "market_bias": null, "vix_outlook": null, "sectors": {}, "risks": [], "summary": ""}"""
+
 
 def _extract_json_object(text: str) -> dict:
     """
@@ -138,6 +162,50 @@ def _extract_json_object(text: str) -> dict:
     if start == -1 or end == -1 or end < start:
         raise ValueError("No JSON object found in response")
     return json.loads(text[start:end + 1])
+
+
+def load_macro_signals() -> list:
+    if MACRO_FILE.exists():
+        return json.loads(MACRO_FILE.read_text())
+    return []
+
+
+def save_macro_signals(signals: list):
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=MACRO_RETENTION_DAYS)).strftime("%Y-%m-%d")
+    signals = [s for s in signals if s.get("date", "9999") >= cutoff]
+    MACRO_FILE.write_text(json.dumps(signals, indent=2))
+    log.info(f"macro_signals.json updated — {len(signals)} signal(s) retained")
+
+
+def analyze_macro(client: anthropic.Anthropic, content: str, source_label: str, date_str: str) -> dict | None:
+    """Returns a macro signal dict, or None if not macro content or on error."""
+    raw = ""
+    try:
+        msg = client.messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=512,
+            messages=[{
+                "role": "user",
+                "content": f"Source: {source_label}\n\nContent:\n{content[:6000]}"
+            }],
+            system=MACRO_PROMPT,
+        )
+        raw = msg.content[0].text
+        data = _extract_json_object(raw)
+        if not data.get("is_macro"):
+            return None
+        return {
+            "date":          date_str,
+            "source":        source_label,
+            "market_bias":   data.get("market_bias"),
+            "vix_outlook":   data.get("vix_outlook"),
+            "sectors":       data.get("sectors", {}),
+            "risks":         data.get("risks", []),
+            "summary":       data.get("summary", ""),
+        }
+    except Exception as e:
+        log.warning(f"Macro analysis failed for '{source_label}': {e} | raw={raw[:200]!r}")
+        return None
 
 
 def analyze_content(client: anthropic.Anthropic, content: str, source_label: str) -> tuple[list, list]:
@@ -238,14 +306,16 @@ def get_transcript(video_id: str) -> str:
         return ""
 
 
-def scan_youtube(client: anthropic.Anthropic, stocks: dict, seen: set, since: datetime):
+def scan_youtube(client: anthropic.Anthropic, stocks: dict, seen: set, since: datetime) -> list:
+    """Returns list of macro signal dicts collected during this scan."""
     yt_api_key = os.environ.get("YOUTUBE_API_KEY")
     if not yt_api_key:
         log.warning("YOUTUBE_API_KEY not set — skipping YouTube")
-        return
+        return []
 
-    youtube   = build("youtube", "v3", developerKey=yt_api_key)
-    channels  = load_youtube_channels()
+    youtube      = build("youtube", "v3", developerKey=yt_api_key)
+    channels     = load_youtube_channels()
+    macro_new    = []
     log.info(f"YouTube: scanning {len(channels)} channel(s)")
 
     for identifier in channels:
@@ -272,6 +342,7 @@ def scan_youtube(client: anthropic.Anthropic, stocks: dict, seen: set, since: da
             vid_id    = item["id"]["videoId"]
             title     = item["snippet"]["title"]
             channel   = item["snippet"]["channelTitle"]
+            pub_date  = item["snippet"]["publishedAt"][:10]
 
             if vid_id in seen:
                 log.info(f"  Skipping (already processed): [{channel}] {title}")
@@ -283,10 +354,15 @@ def scan_youtube(client: anthropic.Anthropic, stocks: dict, seen: set, since: da
                 log.warning(f"    ⚠ No transcript available — Claude only sees title/description")
             else:
                 log.info(f"    Transcript fetched: {len(transcript)} chars")
-            content    = f"Title: {title}\n\nDescription: {item['snippet'].get('description','')[:300]}\n\nTranscript: {transcript}"
-            source     = f"YouTube: {channel}"
+            content = f"Title: {title}\n\nDescription: {item['snippet'].get('description','')[:300]}\n\nTranscript: {transcript}"
+            source  = f"YouTube: {channel}"
 
             bullish, bearish = analyze_content(client, content, source)
+
+            macro = analyze_macro(client, content, source, pub_date)
+            if macro:
+                log.info(f"    -> macro: bias={macro['market_bias']} vix={macro['vix_outlook']} risks={macro['risks']}")
+                macro_new.append(macro)
 
             # Only mark as seen if analysis actually ran (not an API error)
             if bullish is not None and bearish is not None:
@@ -298,6 +374,8 @@ def scan_youtube(client: anthropic.Anthropic, stocks: dict, seen: set, since: da
                 remove_stock(stocks, ticker, source, reason="expert bearish signal")
 
             seen.add(vid_id)
+
+    return macro_new
 
 
 
@@ -511,7 +589,7 @@ def main():
 
     log.info(f"=== Scan started | lookback={args.days}d | existing stocks={sorted(before)} ===")
 
-    scan_youtube(client, stocks, seen, since)
+    macro_new = scan_youtube(client, stocks, seen, since)
     scan_alphavantage(client, stocks, seen, since)
     # X/Twitter scanning disabled — free scraping (nitter) is no longer reliable.
     # Re-enable once a paid X API or alternative source is set up.
@@ -522,10 +600,13 @@ def main():
     removed = before - after
 
     log.info(f"=== Scan complete | added={sorted(added)} | removed={sorted(removed)} | total={sorted(after)} ===")
+    log.info(f"=== Macro signals collected this run: {len(macro_new)} ===")
 
     if not args.dry_run:
         save_stocks(stocks)
         save_seen(seen)
+        existing_macro = load_macro_signals()
+        save_macro_signals(existing_macro + macro_new)
     else:
         log.info("[DRY RUN] No files were modified")
 
