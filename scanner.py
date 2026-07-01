@@ -69,8 +69,11 @@ def save_stocks(stocks: dict):
 def add_stock(stocks: dict, ticker: str, source: str):
     today = datetime.now().strftime("%Y-%m-%d")
     # Deduplicate known aliases — always use the canonical ticker
-    aliases = {"GOOG": "GOOGL"}
+    aliases = {"GOOG": "GOOGL", "GOOGL": "GOOGL"}
     ticker = aliases.get(ticker, ticker)
+    # Also merge any existing GOOG entry into GOOGL
+    if "GOOG" in stocks and ticker == "GOOGL":
+        stocks["GOOGL"] = stocks.pop("GOOG")
     if ticker in stocks:
         stocks[ticker]["mentions"] += 1
         if source not in stocks[ticker]["sources"]:
@@ -86,7 +89,7 @@ def add_stock(stocks: dict, ticker: str, source: str):
 
 
 def remove_stock(stocks: dict, ticker: str, source: str, reason: str):
-    aliases = {"GOOG": "GOOGL"}
+    aliases = {"GOOG": "GOOGL", "GOOGL": "GOOGL"}
     ticker = aliases.get(ticker, ticker)
     if ticker in stocks:
         del stocks[ticker]

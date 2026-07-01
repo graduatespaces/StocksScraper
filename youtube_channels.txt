@@ -1,22 +1,12 @@
 # YouTube channels to scan — one per line
 # Supports: @handle, full URL, or UCxxxxxxx channel ID
 # Lines starting with # are ignored
+#
+# Kept to 5 channels — YouTube blocks transcript API after ~10 requests per session.
+# Channels are ordered by signal quality; top channels get transcripts, bottom ones get blocked.
 
-# Stock picks + macro
-@MeetKevin
 @RickOrford
+@MeetKevin
 @MarketBeatMedia
 @CNBCtelevision
 @SchwabNetwork
-@DumbMoneyLive
-@InvestingWithTom
-@InvestorsBusinessDaily
-
-# Macro / regime reads
-@GoldmanSachs
-@morningstar
-@BloombergTelevision
-
-# Tech / momentum focus
-@CathieWood
-https://www.youtube.com/@StockAnalysis
