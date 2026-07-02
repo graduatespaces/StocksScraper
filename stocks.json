@@ -37,13 +37,6 @@
     ],
     "mentions": 13
   },
-  "STX": {
-    "added": "2026-06-22",
-    "sources": [
-      "YouTube: MarketBeat"
-    ],
-    "mentions": 1
-  },
   "CEG": {
     "added": "2026-06-22",
     "sources": [
@@ -127,7 +120,7 @@
       "YouTube: Schwab Network",
       "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 2
+    "mentions": 3
   },
   "TGT": {
     "added": "2026-06-23",
@@ -167,9 +160,10 @@
   "OKLO": {
     "added": "2026-06-25",
     "sources": [
-      "YouTube: MarketBeat"
+      "YouTube: MarketBeat",
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 1
+    "mentions": 2
   },
   "SMR": {
     "added": "2026-06-25",
@@ -321,6 +315,20 @@
   },
   "ORCL": {
     "added": "2026-07-01",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "ADBE": {
+    "added": "2026-07-02",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "PLTR": {
+    "added": "2026-07-02",
     "sources": [
       "YouTube: Schwab Network"
     ],
