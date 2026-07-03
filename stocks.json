@@ -203,9 +203,10 @@
   "ASML": {
     "added": "2026-06-26",
     "sources": [
-      "YouTube: MarketBeat"
+      "YouTube: MarketBeat",
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 1
+    "mentions": 2
   },
   "SNOW": {
     "added": "2026-06-26",
@@ -232,16 +233,17 @@
   "MSFT": {
     "added": "2026-06-26",
     "sources": [
-      "YouTube: Schwab Network"
+      "YouTube: Schwab Network",
+      "YouTube: MarketBeat"
     ],
-    "mentions": 1
+    "mentions": 2
   },
   "META": {
     "added": "2026-06-26",
     "sources": [
       "YouTube: Schwab Network"
     ],
-    "mentions": 1
+    "mentions": 3
   },
   "IONQ": {
     "added": "2026-06-27",
@@ -331,6 +333,13 @@
     "added": "2026-07-02",
     "sources": [
       "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "QBTS": {
+    "added": "2026-07-03",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
     "mentions": 1
   }
