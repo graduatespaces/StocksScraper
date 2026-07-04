@@ -163,7 +163,7 @@
       "YouTube: MarketBeat",
       "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 2
+    "mentions": 3
   },
   "SMR": {
     "added": "2026-06-25",
@@ -338,6 +338,13 @@
   },
   "QBTS": {
     "added": "2026-07-03",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "ETN": {
+    "added": "2026-07-04",
     "sources": [
       "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
