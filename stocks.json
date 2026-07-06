@@ -110,9 +110,10 @@
     "added": "2026-06-24",
     "sources": [
       "YouTube: Schwab Network",
-      "YouTube: MarketBeat"
+      "YouTube: MarketBeat",
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 2
+    "mentions": 3
   },
   "IBM": {
     "added": "2026-06-23",
@@ -204,9 +205,10 @@
     "added": "2026-06-26",
     "sources": [
       "YouTube: MarketBeat",
-      "YouTube: Rick Orford - Trading Stocks and Options For All"
+      "YouTube: Rick Orford - Trading Stocks and Options For All",
+      "YouTube: Schwab Network"
     ],
-    "mentions": 2
+    "mentions": 3
   },
   "SNOW": {
     "added": "2026-06-26",
@@ -236,7 +238,7 @@
       "YouTube: Schwab Network",
       "YouTube: MarketBeat"
     ],
-    "mentions": 2
+    "mentions": 3
   },
   "META": {
     "added": "2026-06-26",
@@ -341,7 +343,7 @@
     "sources": [
       "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 1
+    "mentions": 2
   },
   "ETN": {
     "added": "2026-07-04",
