@@ -245,7 +245,7 @@
     "sources": [
       "YouTube: Schwab Network"
     ],
-    "mentions": 3
+    "mentions": 4
   },
   "IONQ": {
     "added": "2026-06-27",
@@ -361,6 +361,20 @@
   },
   "AMAT": {
     "added": "2026-07-05",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "SHOP": {
+    "added": "2026-07-07",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "RDDT": {
+    "added": "2026-07-07",
     "sources": [
       "YouTube: Schwab Network"
     ],
