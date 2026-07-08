@@ -90,7 +90,7 @@
       "YouTube: CNBC Television",
       "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 2
+    "mentions": 3
   },
   "ARM": {
     "added": "2026-06-24",
@@ -334,9 +334,10 @@
   "PLTR": {
     "added": "2026-07-02",
     "sources": [
-      "YouTube: Schwab Network"
+      "YouTube: Schwab Network",
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 1
+    "mentions": 2
   },
   "QBTS": {
     "added": "2026-07-03",
@@ -375,6 +376,20 @@
   },
   "RDDT": {
     "added": "2026-07-07",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "WDC": {
+    "added": "2026-07-08",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "DLTR": {
+    "added": "2026-07-08",
     "sources": [
       "YouTube: Schwab Network"
     ],
