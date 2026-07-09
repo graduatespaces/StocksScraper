@@ -173,12 +173,12 @@ Yahoo Finance VIX endpoint blocked by proxy — use Robinhood only.
 
 ## Current State (update at end of each session)
 
-**As of Jun 27, 2026:**
-- Regime: **EARLY WARNING** (SPY ~$732 vs 50d SMA ~$734, 200d SMA ~$690)
-- VIX: 18.73 (low — no VIX adjustment needed)
-- Win-rate halve: **ACTIVE** (win rate < 35%)
-- Q-end window: **ACTIVE** (Jun 23–30 = last 6 trading days of Q2 2026)
-- Effective multiplier: Q-end override (100%) × EARLY_WARNING cap (75%) × win-rate halve (50%) = **37.5% of normal base size**
+**As of Jul 9, 2026:**
+- Regime: **RISK-ON** (SPY $745.40 vs 50d SMA $739.64 (+$5.76), 200d SMA $693.11) — EARLY WARNING cleared
+- VIX: ~18.7 (low — no VIX adjustment needed)
+- Win-rate halve: **CHECK FRESH** (was active as of Jun 27; lookback now shortened to 10 trades)
+- Q-end window: **NOT ACTIVE** (Q2 ended Jun 30; New-Q window may still be active — first 7 trading days of Jul)
+- Effective multiplier: RISK-ON (×1.0) × win-rate halve (check) × bear score (~×0.86) ≈ ~86% if halve cleared, ~43% if still active
 
 ---
 
