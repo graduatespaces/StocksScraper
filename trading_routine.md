@@ -211,6 +211,10 @@ UNIVERSAL OVERRIDES (highest priority — override classification rules above):
    Fund manager dip-buying creates the entry.
 3. New-Q window (first N calibrated trading days of Jan/Apr/Jul/Oct, default 7)
    → Restore seasonal fraction to 100% (other reductions still apply). Institutional reallocation bounce.
+   ACTIVE DEPLOYMENT RULE: If cash > 40% of sleeve AND regime is not RISK-OFF AND no new position
+   has been opened yet today AND it is the 2:30 entry-window run → do not carry idle cash through
+   the New-Q window. Actively scan for the best available PATH A or PATH B setup and deploy.
+   Log: "New-Q deployment scan — cash [X]% of sleeve, seeking entry."
 
 APRIL OVERLAY (existing, unchanged): quality ×0.75, no new speculative.
 If April is also a negative-bias re-entry window, apply April ×0.75 on top.
@@ -272,11 +276,19 @@ PATH B suspended, trails tightened to +2%, sizing ×0.75, no spec entries,
 stop confirmation + 52W-low override active for quality names."
 
 POST QUARTER-END BOUNCE WATCH (first 3 trading days of new quarter):
-- Quality names that pulled back >5% during the window are prime PATH A
-  candidates as institutional cash gets redeployed.
-- Enter at FULL normal size (no ×0.75) if PATH A signal fires with RSI < 50.
+- Quality names that pulled back >5% during the Q-end window are prime PATH A
+  candidates as institutional cash gets redeployed. PRIORITIZE these over all
+  other candidates — they are the highest-conviction setups of the quarter open.
+- At the Monday 9:30 run starting a new quarter: scan all core quality names,
+  identify any that pulled back >5% during the prior Q-end window, and list them
+  as "POST-QE BOUNCE WATCHLIST: [SYM] −X% during Q-end" in the report.
+- At 10:30 and 2:30 entry windows: check watchlist first before scanning wider
+  universe. If PATH A signal fires (RSI < 50) on any watchlist name → enter
+  immediately at FULL normal base size (no ×0.75, no earnings chop reduction).
+  Regime cap and bear score still apply.
   Label these "POST-QE BOUNCE" in report.
-- Window dressing pops: do NOT enter until price consolidated ≥1 session.
+- Window dressing pops (names that surged during Q-end): do NOT enter until
+  price has consolidated ≥1 session after the pop.
 
 SIZE CONFLICT RESOLUTION: Quarter-end ×0.75 multiplies with other active
 reductions (VIX>30, Extreme Greed, bear score). Floor remains ×0.525 for
@@ -304,6 +316,16 @@ Deploy at most 1/3 of total SETTLED cash per day in new buys. Never sell unsettl
 
 ━━━ STEP 1 — STATE ━━━
 get_portfolio, get_equity_positions, get_equity_orders (settlement dates, duplicate order check).
+
+EARNINGS DATE REFRESH (Monday 9:30 run only, start of each quarter):
+Call get_earnings_calendar for the current quarter's date range. For each core symbol
+(NVDA, AVGO, MSFT, META, GOOGL, AMZN, PLTR), extract the confirmed report date and
+whether it is BMO or AMC. Compare against the hardcoded MAJOR EARNINGS DATES in the
+EARNINGS SEASON CHOP OVERLAY. If any date differs by more than 2 trading days, flag:
+"EARNINGS DATE UPDATED: [SYM] confirmed [date] [BMO/AMC] — was [old date]. Mandatory
+exit and pre-earnings drift window adjusted accordingly."
+If get_earnings_calendar is unavailable, retain hardcoded dates and note "Earnings
+calendar unavailable — using hardcoded dates, verify manually."
 
 ━━━ STEP 2 — DATA ━━━
 - get_equity_quotes for holdings + candidates.
