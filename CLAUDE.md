@@ -6,6 +6,16 @@ Robinhood Account: 699589594
 
 ---
 
+## Git Workflow (ALWAYS follow this)
+
+After every session that modifies any file:
+1. Commit changes to the working branch.
+2. Push to `origin/<branch>`.
+3. **Immediately create a PR to `main`** using the GitHub MCP tool (`mcp__github__create_pull_request`). Do not wait for the user to ask.
+4. Post the PR URL in the chat so the user can merge it.
+
+---
+
 ## Strategy: Seasonal Swing Trading
 
 Three filters applied in order — each one narrows what the next can do:
