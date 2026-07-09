@@ -35,7 +35,7 @@
       "YouTube: CNBC Television",
       "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 13
+    "mentions": 14
   },
   "CEG": {
     "added": "2026-06-22",
@@ -307,13 +307,6 @@
     "added": "2026-07-01",
     "sources": [
       "YouTube: Rick Orford - Trading Stocks and Options For All"
-    ],
-    "mentions": 1
-  },
-  "CRM": {
-    "added": "2026-07-01",
-    "sources": [
-      "YouTube: Schwab Network"
     ],
     "mentions": 1
   },
