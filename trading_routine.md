@@ -13,6 +13,7 @@ Early closes (1pm ET): Nov 27, Dec 24.
 - Never trim winners to rebalance. Positions exit ONLY on trailing stop or hard stop.
 
 ━━━ UNIVERSE (entry-window runs only) ━━━
+- DAILY FOCUS LIST (scan first, highest priority): NVDA, MSFT, META, GOOGL, AVGO, AMD, PLTR, COIN. Evaluate these 8 names before scanning the wider universe each entry window.
 - Dynamic watchlist: fetch https://raw.githubusercontent.com/graduatespaces/StocksScraper/main/stocks.json — merge with core. If unavailable, use core only.
   Classification: Quality list → quality. Market cap ≥ $10B → quality. Else speculative.
 - Core: Speculative = IONQ, RGTI, SOUN, SMCI, RKLB, MSTR, COIN, HOOD, NBIS, PLTR, CRDO, CLS, NU. Quality = NVDA, META, GOOGL, MSFT, AMD, AVGO, CRM, NOW, SNOW, INTU.
@@ -310,7 +311,7 @@ Deploy at most 1/3 of total SETTLED cash per day in new buys. Never sell unsettl
 
 ━━━ RUN SCHEDULE ━━━
 - 9:30: report only.
-- 10:30 and 2:30: entry windows (max 3 new buys/day total across both windows).
+- 10:30 and 2:30: entry windows (max 5 new buys/day total across both windows).
 - All other runs: exit checks only.
 - Fridays: trade normally including 2:30 entry window.
 
@@ -379,7 +380,7 @@ PATH B — MOMENTUM BREAKOUT: RSI-14 crossing above 50 from below (was < 50 yest
 ALL of the following must also be true for either path:
 1. RSI-14 ≤ 70.
 2. No earnings within 3 days.
-3. Last two 15m candles not making new lows (PATH A) OR last two 15m candles making higher lows OR flat (PATH B — flat candles are fine for momentum entries).
+3. ADVISORY (not a block): last two 15m candles. If making new lows (PATH A) or failing to make higher lows (PATH B), note "15m caution — candles unfavorable" in report but do NOT skip the entry. Strong RSI/volume signal overrides.
 4. Not up > 12% today (18% for post-earnings gap).
 5. No macro pause active.
 6. Regime not RISK-OFF.
@@ -387,7 +388,7 @@ ALL of the following must also be true for either path:
 8. Self-throttle not active.
 9. Seasonal overlay not blocking entry (balanced/balanced-strict symbols in binary exit window — do not enter).
 10. Signal strength tagging — used by Step 4 to set trailing exit speed. Since Robinhood orders have no notes field, derive signal strength each run from order history: for each open position, re-evaluate the entry signal using the price and volume data from the buy date. If RSI on buy date was < 35 (PATH A) or volume was > 2× avg (PATH B) → classify as STRONG. Otherwise NORMAL. This re-derivation happens fresh every run — no cross-session memory needed.
-11. Sizing: base ($2,500–4,000 quality / $1,500–2,500 speculative) × seasonal fraction × bear multiplier × all other active regime multipliers. When sleeve cash > 40% and regime is RISK-ON: actively seek the best available setup — prioritize deployment over waiting.
+11. Sizing: base ($1,500–3,000 quality / $1,000–2,000 speculative) × seasonal fraction × bear multiplier × all other active regime multipliers. When sleeve cash > 40% and regime is RISK-ON: actively seek the best available setup — prioritize deployment over waiting.
 12. Order: marketable LIMIT at ask + 0.3%, time_in_force=gfd, whole shares. Never market orders.
 13. After fill: place resting GTC immediately.
 
@@ -430,10 +431,10 @@ Dust rule: remnants < $150 → market order.
 Derived fresh from get_equity_orders each run:
 - 4+ consecutive losing closed trades: no new entries for 1 trading day only. Report "Throttle active, clears [date]." (Loosened from 3 losses / 2 days — don't over-throttle in volatile markets.)
 - Week down > 7% vs Monday open: exits only for remainder of week.
-- Last 20 closed trades < 35% win rate: halve base sizes and flag in report.
+- Last 10 closed trades < 35% win rate: halve base sizes and flag in report.
 
 ━━━ HARD LIMITS ━━━
-Max 3 new buys/day (raised from 2). Max 4 speculative positions (raised from 3). Max 30% of sleeve in one position (raised from 25%). Keep ≥ 10% sleeve in cash (lowered from 15% — stay deployed). Max 1/3 settled cash deployed/day. Verify quote timestamps from today. Cancel conflicting GTC before any exit.
+Max 5 new buys/day (raised from 3). Max 4 speculative positions. Max 8 total active positions (raised from 6). Max 30% of sleeve in one position (raised from 25%). Keep ≥ 10% sleeve in cash (lowered from 15% — stay deployed). Max 1/3 settled cash deployed/day. Verify quote timestamps from today. Cancel conflicting GTC before any exit.
 
 ━━━ NOTIFICATIONS ━━━
 Alert (one sentence) when: order error; mode changes (RISK-ON/EARLY WARNING/RISK-OFF/DIP BUYING); VIX crosses 30 or 45; VIX stairstepping starts or stops; hard stop or trail fires; SPY base threatened; tools error; dynamic watchlist fails 2 consecutive runs; macro pause activates; throttle activates; Extreme Greed detected; Dip Buying Mode activates; dip scaling paused (SPY made new low); dip buying complete (all 3 days filled); PRE-EARNINGS CHOP WINDOW starts or ends; position exited pre-earnings as planned; bear score crosses into WARNING (>0.60) or BEAR (>0.80); bear score recovers below CAUTION (<0.40).
