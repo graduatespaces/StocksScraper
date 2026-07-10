@@ -377,12 +377,34 @@
   "WDC": {
     "added": "2026-07-08",
     "sources": [
-      "YouTube: Rick Orford - Trading Stocks and Options For All"
+      "YouTube: Rick Orford - Trading Stocks and Options For All",
+      "YouTube: Schwab Network"
     ],
-    "mentions": 1
+    "mentions": 2
   },
   "DLTR": {
     "added": "2026-07-08",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "DAL": {
+    "added": "2026-07-10",
+    "sources": [
+      "YouTube: CNBC Television"
+    ],
+    "mentions": 1
+  },
+  "STX": {
+    "added": "2026-07-10",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 2
+  },
+  "TOL": {
+    "added": "2026-07-10",
     "sources": [
       "YouTube: Schwab Network"
     ],
