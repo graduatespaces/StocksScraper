@@ -50,7 +50,7 @@ QUARTER_STR_MONTHS = [1, 4, 7, 10]
 BINARY_EXIT_SYMBOLS = ["META", "GOOGL", "SPY"]
 
 
-# ── Robinhood ─────────────────────────────────────────────────────────────────
+# ── Robinhood ─────────────────────────────────────────────────────────────────────────────
 
 def _rh():
     try:
@@ -82,7 +82,7 @@ def fetch_history(rh, symbol: str) -> tuple[list[date], list[float]]:
     return dates, closes
 
 
-# ── RSI ───────────────────────────────────────────────────────────────────────
+# ── RSI ───────────────────────────────────────────────────────────────────────────────
 
 def _compute_rsi_series(closes: list[float], period: int = 14) -> list[float | None]:
     """Compute RSI-14 for every bar. Returns None for bars without enough history."""
@@ -147,7 +147,7 @@ def calibrate_rsi_threshold(
     return best_t
 
 
-# ── Exit window fraction ──────────────────────────────────────────────────────
+# ── Exit window fraction ─────────────────────────────────────────────────────────
 
 def calibrate_exit_window(
     dates: list[date],
@@ -221,7 +221,7 @@ def calibrate_exit_window(
     return results
 
 
-# ── Quarter-end window ────────────────────────────────────────────────────────
+# ── Quarter-end window ─────────────────────────────────────────────────────────────
 
 def calibrate_qend_days(
     dates: list[date],
@@ -319,7 +319,7 @@ def calibrate_newq_days(
     return best_n
 
 
-# ── Main calibration runner ───────────────────────────────────────────────────
+# ── Main calibration runner ────────────────────────────────────────────────────────────
 
 def _all_symbols() -> list[str]:
     """Core symbols + any dynamic picks from stocks.json, deduped and sorted."""

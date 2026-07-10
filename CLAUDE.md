@@ -212,3 +212,57 @@ v4 also reduced trade count from ~220 to ~50 per symbol over 7 years.
 - GitHub git clone/push: **blocked** (org policy). Use GitHub web UI to update this file.
 - Yahoo Finance API (v7/v8): **blocked**. Use Robinhood MCP for all market data.
 - raw.githubusercontent.com: **accessible** for file fetches.
+
+---
+
+## Scanner Architecture
+
+### Files
+| File | Purpose |
+|------|---------|
+| `scanner.py` | Main scanner — YouTube + Alpha Vantage → `stocks.json` + `macro_signals.json` |
+| `daily_sizing.py` | Daily sizing report — fetches live Robinhood data, applies seasonal/regime/bear rules |
+| `seasonal_sizing.py` | Seasonal allocation logic per symbol/month |
+| `bear_score.py` | Bear score computation and size multiplier |
+| `stocks.json` | Dynamic stock watchlist built by scanner (rolling, no expiry) |
+| `macro_signals.json` | Macro signals from forecast channels (rolling 14-day window) |
+| `seen_content.json` | Tracks processed video/article IDs to avoid re-processing |
+| `youtube_channels.txt` | YouTube channels to scan |
+| `scheduler.sh` + `com.stockscanner.daily.plist` | Mac launchd — runs `scanner.py` daily at 8am local time |
+
+### 8am Run (Mac launchd — local, NOT GitHub Actions)
+- Scans YouTube channels for last 2 days of videos
+- Two Claude passes per video:
+  1. **Stock pass** (Sonnet) — extracts explicit buy/sell ticker signals → `stocks.json`
+  2. **Macro pass** (Haiku) — extracts market bias, VIX outlook, sector leans, key risks → `macro_signals.json`
+- Scans Alpha Vantage news sentiment for core watchlist tickers
+- Commits and pushes updated `stocks.json`, `seen_content.json`, `macro_signals.json` to GitHub
+
+### YouTube Channels (as of Jun 2026)
+| Channel | Type |
+|---------|------|
+| @MeetKevin | Stock picks + macro |
+| @RickOrford | Stock picks |
+| @MarketBeatMedia | Stock picks |
+| @CNBCtelevision | Stock picks + macro |
+| @SchwabNetwork | Stock picks + macro |
+| @DumbMoneyLive | Stock picks |
+| @InvestingWithTom | Stock picks |
+| @InvestorsBusinessDaily | Momentum stocks |
+| @GoldmanSachs | Macro / regime |
+| @morningstar | Macro / regime |
+| @BloombergTelevision | Macro / regime |
+| @CathieWood | Tech / momentum |
+| @StockAnalysis | Stock analysis |
+
+---
+
+## Session Log
+
+### Jun 29, 2026
+- Confirmed 8am automated run executed (commit `690185a` by Stock Scanner Bot at 16:36 UTC)
+- Today's new picks: **TER** (Teradyne), **MRVL** (Marvell) — both from Rick Orford
+- Added macro signal extraction: second Claude Haiku pass per video → `macro_signals.json` (14-day rolling)
+- `daily_sizing.py` now shows "Analyst Macro Consensus" section (7-day lookback) at top of report
+- Fixed duplicate channels: removed second entries for @MeetKevin and @AndreiJikh
+- Refreshed channel list: removed @AndreiJikh, @GrahamStephan, @JosephCarlson, @NewMoneyYouTube; added @BloombergTelevision, @InvestorsBusinessDaily, @CathieWood, @StockAnalysis

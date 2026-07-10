@@ -32,16 +32,10 @@
     "sources": [
       "YouTube: MarketBeat",
       "YouTube: Schwab Network",
-      "YouTube: CNBC Television"
+      "YouTube: CNBC Television",
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 11
-  },
-  "STX": {
-    "added": "2026-06-22",
-    "sources": [
-      "YouTube: MarketBeat"
-    ],
-    "mentions": 1
+    "mentions": 14
   },
   "CEG": {
     "added": "2026-06-22",
@@ -78,9 +72,10 @@
     "added": "2026-06-23",
     "sources": [
       "YouTube: Rick Orford - Trading Stocks and Options For All",
-      "YouTube: CNBC Television"
+      "YouTube: CNBC Television",
+      "YouTube: Schwab Network"
     ],
-    "mentions": 2
+    "mentions": 3
   },
   "VST": {
     "added": "2026-06-23",
@@ -95,7 +90,7 @@
       "YouTube: CNBC Television",
       "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 2
+    "mentions": 3
   },
   "ARM": {
     "added": "2026-06-24",
@@ -114,16 +109,19 @@
   "GEV": {
     "added": "2026-06-24",
     "sources": [
-      "YouTube: Schwab Network"
+      "YouTube: Schwab Network",
+      "YouTube: MarketBeat",
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 1
+    "mentions": 3
   },
   "IBM": {
     "added": "2026-06-23",
     "sources": [
-      "YouTube: Schwab Network"
+      "YouTube: Schwab Network",
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 1
+    "mentions": 3
   },
   "TGT": {
     "added": "2026-06-23",
@@ -163,9 +161,10 @@
   "OKLO": {
     "added": "2026-06-25",
     "sources": [
-      "YouTube: MarketBeat"
+      "YouTube: MarketBeat",
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 1
+    "mentions": 3
   },
   "SMR": {
     "added": "2026-06-25",
@@ -205,9 +204,11 @@
   "ASML": {
     "added": "2026-06-26",
     "sources": [
-      "YouTube: MarketBeat"
+      "YouTube: MarketBeat",
+      "YouTube: Rick Orford - Trading Stocks and Options For All",
+      "YouTube: Schwab Network"
     ],
-    "mentions": 1
+    "mentions": 3
   },
   "SNOW": {
     "added": "2026-06-26",
@@ -226,19 +227,162 @@
   "AMZN": {
     "added": "2026-06-26",
     "sources": [
-      "YouTube: Schwab Network"
+      "YouTube: Schwab Network",
+      "YouTube: Dumb Money Live"
     ],
-    "mentions": 1
+    "mentions": 2
   },
   "MSFT": {
     "added": "2026-06-26",
+    "sources": [
+      "YouTube: Schwab Network",
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 3
+  },
+  "META": {
+    "added": "2026-06-26",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 4
+  },
+  "IONQ": {
+    "added": "2026-06-27",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 2
+  },
+  "TER": {
+    "added": "2026-06-29",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "MRVL": {
+    "added": "2026-06-29",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 2
+  },
+  "TSLA": {
+    "added": "2026-07-01",
+    "sources": [
+      "YouTube: Meet Kevin"
+    ],
+    "mentions": 1
+  },
+  "CIEN": {
+    "added": "2026-07-01",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "AMPX": {
+    "added": "2026-07-01",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 1
+  },
+  "GOOGL": {
+    "added": "2026-07-01",
+    "sources": [
+      "YouTube: MarketBeat"
+    ],
+    "mentions": 1
+  },
+  "SNDK": {
+    "added": "2026-07-01",
     "sources": [
       "YouTube: Schwab Network"
     ],
     "mentions": 1
   },
-  "META": {
-    "added": "2026-06-26",
+  "EQIX": {
+    "added": "2026-07-01",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "ORCL": {
+    "added": "2026-07-01",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "ADBE": {
+    "added": "2026-07-02",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "PLTR": {
+    "added": "2026-07-02",
+    "sources": [
+      "YouTube: Schwab Network",
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 2
+  },
+  "QBTS": {
+    "added": "2026-07-03",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 2
+  },
+  "ETN": {
+    "added": "2026-07-04",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "NET": {
+    "added": "2026-07-05",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "AMAT": {
+    "added": "2026-07-05",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "SHOP": {
+    "added": "2026-07-07",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "RDDT": {
+    "added": "2026-07-07",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "WDC": {
+    "added": "2026-07-08",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "DLTR": {
+    "added": "2026-07-08",
     "sources": [
       "YouTube: Schwab Network"
     ],

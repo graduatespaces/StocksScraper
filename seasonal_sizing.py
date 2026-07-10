@@ -27,7 +27,7 @@ Usage:
 import json
 from pathlib import Path
 
-# ─── SYMBOL CLASSIFICATION ────────────────────────────────────────────────────
+# ─── SYMBOL CLASSIFICATION ───────────────────────────────────────────────────────────────────────────────
 
 SYMBOL_TYPE = {
     # momentum: secular compounders — never fully exit, 90% floor in bad months
@@ -41,7 +41,7 @@ SYMBOL_TYPE = {
     'SPY':   'balanced_strict',
 }
 
-# ─── MONTHLY BIAS ─────────────────────────────────────────────────────────────
+# ─── MONTHLY BIAS ────────────────────────────────────────────────────────────────────────────────
 # +1 = accumulate   0 = cautious (aggressive: stay in)   -1 = negative-bias
 
 MONTHLY_BIAS = {
@@ -49,7 +49,7 @@ MONTHLY_BIAS = {
     7: 1, 8: 0,  9: -1, 10: 0, 11: 1, 12: 1,
 }
 
-# ─── EXIT WINDOW per type ─────────────────────────────────────────────────────
+# ─── EXIT WINDOW per type ─────────────────────────────────────────────────────────────────────
 # Fraction of the month's trading days to stay out during negative-bias months.
 # After this window, re-enter at 100%.
 
@@ -59,7 +59,7 @@ NEG_EARLY_CUTOFF = {
     'balanced_strict': 0.60,  # out first 60% (~13 trading days)
 }
 
-# ─── ALLOCATION FLOORS ────────────────────────────────────────────────────────
+# ─── ALLOCATION FLOORS ───────────────────────────────────────────────────────────────────────────
 # Fraction of base position to keep in market under each condition.
 
 ALLOC = {
@@ -98,7 +98,7 @@ _RSI_OVERSOLD_DEFAULT = 45
 _QEND_DAYS_DEFAULT    = 6
 _NEW_Q_DAYS_DEFAULT   = 7
 
-# ─── LOAD CALIBRATED PARAMS ──────────────────────────────────────────────────
+# ─── LOAD CALIBRATED PARAMS ─────────────────────────────────────────────────────────────
 
 _PARAMS_FILE = Path(__file__).parent / "calibrated_params.json"
 
@@ -136,7 +136,7 @@ def get_exit_window_fraction(symbol: str, month: int) -> float | None:
         return sym_windows.get(str(month))
     return None
 
-# ─── REGIME CAPS ──────────────────────────────────────────────────────────────
+# ─── REGIME CAPS ───────────────────────────────────────────────────────────────────────────────
 
 REGIME_CAPS = {
     'RISK_ON':        1.00,
@@ -147,7 +147,7 @@ REGIME_CAPS = {
 }
 
 
-# ─── MAIN FUNCTION ────────────────────────────────────────────────────────────
+# ─── MAIN FUNCTION ───────────────────────────────────────────────────────────────────────────────
 
 def get_allocation(
     symbol: str,
@@ -223,7 +223,7 @@ def get_allocation(
     return min(seasonal, cap)
 
 
-# ─── HELPER: HUMAN-READABLE EXPLANATION ──────────────────────────────────────
+# ─── HELPER: HUMAN-READABLE EXPLANATION ────────────────────────────────────────────────
 
 def describe_allocation(
     symbol: str,
@@ -271,7 +271,7 @@ def describe_allocation(
     return alloc
 
 
-# ─── QUICK SANITY CHECK ───────────────────────────────────────────────────────
+# ─── QUICK SANITY CHECK ─────────────────────────────────────────────────────────────────────────────
 
 if __name__ == '__main__':
     print('=' * 90)
