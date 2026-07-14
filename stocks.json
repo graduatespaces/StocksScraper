@@ -218,13 +218,6 @@
     ],
     "mentions": 1
   },
-  "AAPL": {
-    "added": "2026-06-26",
-    "sources": [
-      "YouTube: Schwab Network"
-    ],
-    "mentions": 1
-  },
   "AMZN": {
     "added": "2026-06-26",
     "sources": [
@@ -253,7 +246,7 @@
     "sources": [
       "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 2
+    "mentions": 3
   },
   "TER": {
     "added": "2026-06-29",
@@ -415,6 +408,13 @@
     "added": "2026-07-12",
     "sources": [
       "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "SPCX": {
+    "added": "2026-07-14",
+    "sources": [
+      "YouTube: Schwab Network"
     ],
     "mentions": 1
   }
