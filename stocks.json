@@ -83,7 +83,7 @@
     "sources": [
       "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 3
+    "mentions": 4
   },
   "AVGO": {
     "added": "2026-06-24",
@@ -246,7 +246,7 @@
     "sources": [
       "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 3
+    "mentions": 4
   },
   "TER": {
     "added": "2026-06-29",
@@ -415,6 +415,13 @@
     "added": "2026-07-14",
     "sources": [
       "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "ASTS": {
+    "added": "2026-07-15",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
     "mentions": 1
   }
