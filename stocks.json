@@ -246,7 +246,7 @@
     "sources": [
       "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 4
+    "mentions": 5
   },
   "TER": {
     "added": "2026-06-29",
@@ -422,6 +422,27 @@
     "added": "2026-07-15",
     "sources": [
       "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "APLD": {
+    "added": "2026-07-16",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "UNH": {
+    "added": "2026-07-16",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 2
+  },
+  "JBHT": {
+    "added": "2026-07-16",
+    "sources": [
+      "YouTube: Schwab Network"
     ],
     "mentions": 1
   }
