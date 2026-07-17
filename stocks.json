@@ -76,7 +76,7 @@
       "YouTube: CNBC Television",
       "YouTube: Schwab Network"
     ],
-    "mentions": 3
+    "mentions": 5
   },
   "VST": {
     "added": "2026-06-23",
@@ -96,9 +96,10 @@
   "ARM": {
     "added": "2026-06-24",
     "sources": [
-      "YouTube: Schwab Network"
+      "YouTube: Schwab Network",
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 1
+    "mentions": 2
   },
   "QCOM": {
     "added": "2026-06-24",
@@ -441,6 +442,20 @@
   },
   "JBHT": {
     "added": "2026-07-16",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "RGTI": {
+    "added": "2026-07-17",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "AAPL": {
+    "added": "2026-07-17",
     "sources": [
       "YouTube: Schwab Network"
     ],
