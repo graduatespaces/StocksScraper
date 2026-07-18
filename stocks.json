@@ -117,14 +117,6 @@
     ],
     "mentions": 3
   },
-  "IBM": {
-    "added": "2026-06-23",
-    "sources": [
-      "YouTube: Schwab Network",
-      "YouTube: Rick Orford - Trading Stocks and Options For All"
-    ],
-    "mentions": 4
-  },
   "TGT": {
     "added": "2026-06-23",
     "sources": [
@@ -456,6 +448,20 @@
   },
   "AAPL": {
     "added": "2026-07-17",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "NOW": {
+    "added": "2026-07-18",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "PYPL": {
+    "added": "2026-07-18",
     "sources": [
       "YouTube: Schwab Network"
     ],
