@@ -58,7 +58,7 @@
       "YouTube: MarketBeat",
       "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 3
+    "mentions": 4
   },
   "NVDA": {
     "added": "2026-06-23",
@@ -462,6 +462,20 @@
   },
   "PYPL": {
     "added": "2026-07-18",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "SOUN": {
+    "added": "2026-07-19",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "DELL": {
+    "added": "2026-07-19",
     "sources": [
       "YouTube: Schwab Network"
     ],
