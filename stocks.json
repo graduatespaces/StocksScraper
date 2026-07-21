@@ -1,11 +1,4 @@
 {
-  "GOOG": {
-    "added": "2026-06-21",
-    "sources": [
-      "YouTube: Meet Kevin"
-    ],
-    "mentions": 1
-  },
   "OLLI": {
     "added": "2026-06-22",
     "sources": [
@@ -56,9 +49,10 @@
     "added": "2026-06-22",
     "sources": [
       "YouTube: MarketBeat",
-      "YouTube: Rick Orford - Trading Stocks and Options For All"
+      "YouTube: Rick Orford - Trading Stocks and Options For All",
+      "YouTube: Schwab Network"
     ],
-    "mentions": 4
+    "mentions": 5
   },
   "NVDA": {
     "added": "2026-06-23",
@@ -67,7 +61,7 @@
       "YouTube: CNBC Television",
       "YouTube: Schwab Network"
     ],
-    "mentions": 5
+    "mentions": 6
   },
   "AMD": {
     "added": "2026-06-23",
@@ -225,7 +219,7 @@
       "YouTube: Schwab Network",
       "YouTube: MarketBeat"
     ],
-    "mentions": 3
+    "mentions": 4
   },
   "META": {
     "added": "2026-06-26",
@@ -258,9 +252,10 @@
   "TSLA": {
     "added": "2026-07-01",
     "sources": [
-      "YouTube: Meet Kevin"
+      "YouTube: Meet Kevin",
+      "YouTube: Schwab Network"
     ],
-    "mentions": 1
+    "mentions": 2
   },
   "CIEN": {
     "added": "2026-07-01",
@@ -277,11 +272,12 @@
     "mentions": 1
   },
   "GOOGL": {
-    "added": "2026-07-01",
+    "added": "2026-06-21",
     "sources": [
-      "YouTube: MarketBeat"
+      "YouTube: Meet Kevin",
+      "YouTube: Schwab Network"
     ],
-    "mentions": 1
+    "mentions": 2
   },
   "SNDK": {
     "added": "2026-07-01",
@@ -299,13 +295,6 @@
   },
   "ORCL": {
     "added": "2026-07-01",
-    "sources": [
-      "YouTube: Schwab Network"
-    ],
-    "mentions": 1
-  },
-  "ADBE": {
-    "added": "2026-07-02",
     "sources": [
       "YouTube: Schwab Network"
     ],
@@ -342,13 +331,6 @@
   },
   "AMAT": {
     "added": "2026-07-05",
-    "sources": [
-      "YouTube: Schwab Network"
-    ],
-    "mentions": 1
-  },
-  "SHOP": {
-    "added": "2026-07-07",
     "sources": [
       "YouTube: Schwab Network"
     ],
@@ -511,6 +493,20 @@
   },
   "NFLX": {
     "added": "2026-07-20",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "NVTS": {
+    "added": "2026-07-21",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "MMM": {
+    "added": "2026-07-21",
     "sources": [
       "YouTube: Schwab Network"
     ],
