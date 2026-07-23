@@ -28,7 +28,7 @@
       "YouTube: CNBC Television",
       "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 14
+    "mentions": 15
   },
   "CEG": {
     "added": "2026-06-22",
@@ -61,7 +61,7 @@
       "YouTube: CNBC Television",
       "YouTube: Schwab Network"
     ],
-    "mentions": 6
+    "mentions": 7
   },
   "AMD": {
     "added": "2026-06-23",
@@ -196,7 +196,7 @@
       "YouTube: Rick Orford - Trading Stocks and Options For All",
       "YouTube: Schwab Network"
     ],
-    "mentions": 4
+    "mentions": 5
   },
   "SNOW": {
     "added": "2026-06-26",
@@ -249,14 +249,6 @@
     ],
     "mentions": 3
   },
-  "TSLA": {
-    "added": "2026-07-01",
-    "sources": [
-      "YouTube: Meet Kevin",
-      "YouTube: Schwab Network"
-    ],
-    "mentions": 2
-  },
   "CIEN": {
     "added": "2026-07-01",
     "sources": [
@@ -270,14 +262,6 @@
       "YouTube: MarketBeat"
     ],
     "mentions": 1
-  },
-  "GOOGL": {
-    "added": "2026-06-21",
-    "sources": [
-      "YouTube: Meet Kevin",
-      "YouTube: Schwab Network"
-    ],
-    "mentions": 3
   },
   "SNDK": {
     "added": "2026-07-01",
@@ -306,7 +290,7 @@
       "YouTube: Schwab Network",
       "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 2
+    "mentions": 3
   },
   "QBTS": {
     "added": "2026-07-03",
@@ -468,7 +452,7 @@
     "sources": [
       "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 1
+    "mentions": 2
   },
   "LITE": {
     "added": "2026-07-20",
