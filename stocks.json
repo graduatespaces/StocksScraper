@@ -52,7 +52,7 @@
       "YouTube: Rick Orford - Trading Stocks and Options For All",
       "YouTube: Schwab Network"
     ],
-    "mentions": 5
+    "mentions": 6
   },
   "NVDA": {
     "added": "2026-06-23",
@@ -70,7 +70,7 @@
       "YouTube: CNBC Television",
       "YouTube: Schwab Network"
     ],
-    "mentions": 5
+    "mentions": 6
   },
   "VST": {
     "added": "2026-06-23",
@@ -491,6 +491,13 @@
   },
   "MMM": {
     "added": "2026-07-21",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "INTC": {
+    "added": "2026-07-24",
     "sources": [
       "YouTube: Schwab Network"
     ],
