@@ -374,8 +374,8 @@ Extract: rsi_threshold (per symbol), exit_window_fraction (per symbol per neg-bi
 qend_days, newq_days. If fetch fails use hardcoded defaults (RSI 45, META 30%,
 GOOGL/SPY 60%, qend 6d, newq 7d). Cache for the run — do not re-fetch each symbol.
 
-━━━ STEP 3 — ENTRY SIGNALS (entry windows only; max 3 new buys/day) ━━━
-TWO entry paths — either qualifies:
+━━━ STEP 3 — ENTRY SIGNALS (entry windows only; max 5 new buys/day) ━━━
+THREE entry paths — any one qualifies:
 
 PATH A — OVERSOLD BOUNCE: RSI-14 < 45 OR price bouncing off 20MA with volume > 1.2× avg.
 - Signal strength: STRONG if RSI < 35; NORMAL if RSI 35-45.
@@ -383,6 +383,16 @@ PATH A — OVERSOLD BOUNCE: RSI-14 < 45 OR price bouncing off 20MA with volume >
 
 PATH B — MOMENTUM BREAKOUT: RSI-14 ≥ 48 AND volume > 1.5× 20d avg AND price above 20MA AND stock is green on the day (current price > previous close). No momentum entries on a stock that is down on the day — confirms the move is real today.
 - Signal strength: STRONG if volume > 2× avg; NORMAL otherwise.
+
+PATH C — GOLDEN CROSS: 50d SMA crosses above 200d SMA on the individual stock (today's 50d SMA > today's 200d SMA AND yesterday's 50d SMA ≤ yesterday's 200d SMA). High-conviction long-term trend reversal — the rarest and strongest entry signal.
+- Applies to DAILY FOCUS LIST stocks only (NVDA, MSFT, META, GOOGL, AVGO, AMD, PLTR, COIN). Compute from 250-bar daily history already fetched in STEP 2.
+- Bypasses PATH A and PATH B RSI/volume/green-day requirements — the cross itself is the signal.
+- Size: 1.25× normal base (strong conviction premium). Apply regime, bear score, and seasonal multipliers as normal on top.
+- Signal strength: always STRONG.
+- Notify immediately: "GOLDEN CROSS detected: [SYM] 50d SMA crossed above 200d SMA — PATH C entry."
+- All other filters still apply: regime not RISK-OFF, no earnings within 3 days, no macro pause, no self-throttle, seasonal overlay not blocking, analyst not Sell/Strong Sell.
+- If a PATH C cross is detected but entry is blocked (regime, throttle, etc.), note "GOLDEN CROSS on [SYM] — entry blocked by [reason], monitoring for re-entry."
+- Data already available: use the 250-day daily history fetched for SPY regime computation. For individual stocks fetch get_equity_historicals with span=year interval=day.
 
 ALL of the following must also be true for either path:
 1. RSI-14 ≤ 70.
@@ -444,7 +454,7 @@ Derived fresh from get_equity_orders each run:
 Max 5 new buys/day (raised from 3). Max 4 speculative positions. Max 8 total active positions (raised from 6). Max 30% of sleeve in one position (raised from 25%). Keep ≥ 10% sleeve in cash (lowered from 15% — stay deployed). Max 1/3 settled cash deployed/day. Verify quote timestamps from today. Cancel conflicting GTC before any exit.
 
 ━━━ NOTIFICATIONS ━━━
-Alert (one sentence) when: order error; mode changes (RISK-ON/EARLY WARNING/RISK-OFF/DIP BUYING); VIX crosses 30 or 45; VIX stairstepping starts or stops; hard stop or trail fires; SPY base threatened; tools error; dynamic watchlist fails 2 consecutive runs; macro pause activates; throttle activates; Extreme Greed detected; Dip Buying Mode activates; dip scaling paused (SPY made new low); dip buying complete (all 3 days filled); PRE-EARNINGS CHOP WINDOW starts or ends; position exited pre-earnings as planned; bear score crosses into WARNING (>0.60) or BEAR (>0.80); bear score recovers below CAUTION (<0.40).
+Alert (one sentence) when: order error; mode changes (RISK-ON/EARLY WARNING/RISK-OFF/DIP BUYING); VIX crosses 30 or 45; VIX stairstepping starts or stops; hard stop or trail fires; SPY base threatened; tools error; dynamic watchlist fails 2 consecutive runs; macro pause activates; throttle activates; Extreme Greed detected; Dip Buying Mode activates; dip scaling paused (SPY made new low); dip buying complete (all 3 days filled); PRE-EARNINGS CHOP WINDOW starts or ends; position exited pre-earnings as planned; bear score crosses into WARNING (>0.60) or BEAR (>0.80); bear score recovers below CAUTION (<0.40); golden cross detected on any focus list stock (PATH C).
 
 Silent on: monitoring runs, successful entries, no-signal runs.
 
