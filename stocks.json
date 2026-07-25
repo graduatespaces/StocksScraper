@@ -70,7 +70,7 @@
       "YouTube: CNBC Television",
       "YouTube: Schwab Network"
     ],
-    "mentions": 6
+    "mentions": 7
   },
   "VST": {
     "added": "2026-06-23",
@@ -224,9 +224,10 @@
   "META": {
     "added": "2026-06-26",
     "sources": [
-      "YouTube: Schwab Network"
+      "YouTube: Schwab Network",
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 4
+    "mentions": 5
   },
   "IONQ": {
     "added": "2026-06-27",
