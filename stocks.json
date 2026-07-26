@@ -20,16 +20,6 @@
     ],
     "mentions": 2
   },
-  "MU": {
-    "added": "2026-06-22",
-    "sources": [
-      "YouTube: MarketBeat",
-      "YouTube: Schwab Network",
-      "YouTube: CNBC Television",
-      "YouTube: Rick Orford - Trading Stocks and Options For All"
-    ],
-    "mentions": 15
-  },
   "CEG": {
     "added": "2026-06-22",
     "sources": [
@@ -61,7 +51,7 @@
       "YouTube: CNBC Television",
       "YouTube: Schwab Network"
     ],
-    "mentions": 7
+    "mentions": 8
   },
   "AMD": {
     "added": "2026-06-23",
@@ -291,7 +281,7 @@
       "YouTube: Schwab Network",
       "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
-    "mentions": 3
+    "mentions": 5
   },
   "QBTS": {
     "added": "2026-07-03",
@@ -423,9 +413,10 @@
   "NOW": {
     "added": "2026-07-18",
     "sources": [
-      "YouTube: Rick Orford - Trading Stocks and Options For All"
+      "YouTube: Rick Orford - Trading Stocks and Options For All",
+      "YouTube: Schwab Network"
     ],
-    "mentions": 1
+    "mentions": 3
   },
   "PYPL": {
     "added": "2026-07-18",
@@ -501,6 +492,20 @@
     "added": "2026-07-24",
     "sources": [
       "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "TEM": {
+    "added": "2026-07-26",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "TSLA": {
+    "added": "2026-07-26",
+    "sources": [
+      "YouTube: Meet Kevin"
     ],
     "mentions": 1
   }
