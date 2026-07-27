@@ -508,5 +508,48 @@
       "YouTube: Meet Kevin"
     ],
     "mentions": 1
+  },
+  "RKLB": {
+    "added": "2026-07-27",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "LMT": {
+    "added": "2026-07-27",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "GOOGL": {
+    "added": "2026-07-27",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All",
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 2
+  },
+  "F": {
+    "added": "2026-07-27",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "GM": {
+    "added": "2026-07-27",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "GLW": {
+    "added": "2026-07-27",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
   }
 }
