@@ -113,7 +113,7 @@
     "sources": [
       "YouTube: Meet Kevin"
     ],
-    "mentions": 1
+    "mentions": 2
   },
   "CCJ": {
     "added": "2026-06-25",
@@ -340,13 +340,6 @@
     ],
     "mentions": 1
   },
-  "STX": {
-    "added": "2026-07-10",
-    "sources": [
-      "YouTube: Schwab Network"
-    ],
-    "mentions": 2
-  },
   "TOL": {
     "added": "2026-07-10",
     "sources": [
@@ -423,7 +416,7 @@
     "sources": [
       "YouTube: Schwab Network"
     ],
-    "mentions": 1
+    "mentions": 2
   },
   "SOUN": {
     "added": "2026-07-19",
@@ -547,6 +540,27 @@
   },
   "GLW": {
     "added": "2026-07-27",
+    "sources": [
+      "YouTube: Schwab Network"
+    ],
+    "mentions": 1
+  },
+  "SMCI": {
+    "added": "2026-07-28",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "CXMT": {
+    "added": "2026-07-28",
+    "sources": [
+      "YouTube: CNBC Television"
+    ],
+    "mentions": 1
+  },
+  "KO": {
+    "added": "2026-07-28",
     "sources": [
       "YouTube: Schwab Network"
     ],
