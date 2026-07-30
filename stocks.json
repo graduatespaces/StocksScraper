@@ -90,7 +90,7 @@
     "sources": [
       "YouTube: Schwab Network"
     ],
-    "mentions": 1
+    "mentions": 2
   },
   "GEV": {
     "added": "2026-06-24",
@@ -209,7 +209,7 @@
       "YouTube: Schwab Network",
       "YouTube: MarketBeat"
     ],
-    "mentions": 4
+    "mentions": 5
   },
   "META": {
     "added": "2026-06-26",
@@ -568,6 +568,13 @@
   },
   "IREN": {
     "added": "2026-07-29",
+    "sources": [
+      "YouTube: Rick Orford - Trading Stocks and Options For All"
+    ],
+    "mentions": 1
+  },
+  "MU": {
+    "added": "2026-07-30",
     "sources": [
       "YouTube: Rick Orford - Trading Stocks and Options For All"
     ],
