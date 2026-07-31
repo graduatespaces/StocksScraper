@@ -201,7 +201,7 @@
       "YouTube: Schwab Network",
       "YouTube: Dumb Money Live"
     ],
-    "mentions": 2
+    "mentions": 3
   },
   "MSFT": {
     "added": "2026-06-26",
@@ -209,7 +209,7 @@
       "YouTube: Schwab Network",
       "YouTube: MarketBeat"
     ],
-    "mentions": 5
+    "mentions": 6
   },
   "META": {
     "added": "2026-06-26",
@@ -393,13 +393,6 @@
     "added": "2026-07-17",
     "sources": [
       "YouTube: Rick Orford - Trading Stocks and Options For All"
-    ],
-    "mentions": 1
-  },
-  "AAPL": {
-    "added": "2026-07-17",
-    "sources": [
-      "YouTube: Schwab Network"
     ],
     "mentions": 1
   },
